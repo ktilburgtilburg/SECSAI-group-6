@@ -9,6 +9,7 @@ resolution-markers = [
     "python_full_version < '3.14' and sys_platform == 'emscripten'",
     "python_full_version < '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
+<<<<<<< Updated upstream
 
 [[package]]
 name = "appnope"
@@ -283,6 +284,8 @@ sdist = { url = "https://files.pythonhosted.org/packages/27/fb/576f067976d320f5f
 wheels = [
     { url = "https://files.pythonhosted.org/packages/88/39/799be3f2f0f38cc727ee3b4f1445fe6d5e4133064ec2e4115069418a5bb6/cloudpickle-3.1.2-py3-none-any.whl", hash = "sha256:9acb47f6afd73f60dc1df93bb801b472f05ff42fa6c84167d25cb206be1fbf4a", size = 22228, upload-time = "2025-11-03T09:25:25.534Z" },
 ]
+=======
+>>>>>>> Stashed changes
 
 [[package]]
 name = "colorama"
@@ -294,6 +297,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< Updated upstream
 name = "comm"
 version = "0.2.3"
 source = { registry = "https://pypi.org/simple" }
@@ -303,6 +307,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> Stashed changes
 name = "contourpy"
 version = "1.4.0"
 source = { registry = "https://pypi.org/simple" }
@@ -392,6 +398,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< Updated upstream
 name = "debugpy"
 version = "1.8.22"
 source = { registry = "https://pypi.org/simple" }
@@ -444,6 +451,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> Stashed changes
 name = "fonttools"
 version = "4.65.0"
 source = { registry = "https://pypi.org/simple" }
@@ -501,6 +510,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< Updated upstream
 name = "gdown"
 version = "6.4.0"
 source = { registry = "https://pypi.org/simple" }
@@ -526,6 +536,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> Stashed changes
 name = "iniconfig"
 version = "2.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -535,6 +547,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< Updated upstream
 name = "ipykernel"
 version = "7.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -673,6 +686,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> Stashed changes
 name = "kiwisolver"
 version = "1.5.1"
 source = { registry = "https://pypi.org/simple" }
@@ -844,6 +859,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< Updated upstream
 name = "matplotlib-inline"
 version = "0.2.2"
 source = { registry = "https://pypi.org/simple" }
@@ -889,6 +905,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> Stashed changes
 name = "numpy"
 version = "2.5.3"
 source = { registry = "https://pypi.org/simple" }
@@ -1033,6 +1051,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< Updated upstream
 name = "parso"
 version = "0.8.7"
 source = { registry = "https://pypi.org/simple" }
@@ -1054,6 +1073,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> Stashed changes
 name = "pillow"
 version = "12.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1125,6 +1146,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< Updated upstream
 name = "platformdirs"
 version = "4.11.10"
 source = { registry = "https://pypi.org/simple" }
@@ -1147,6 +1169,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> Stashed changes
 name = "pluggy"
 version = "1.6.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1241,6 +1265,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< Updated upstream
 name = "pysocks"
 version = "1.7.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1250,6 +1275,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> Stashed changes
 name = "pytest"
 version = "9.1.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1278,6 +1305,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< Updated upstream
 name = "pyzmq"
 version = "27.2.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1468,6 +1496,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> Stashed changes
 name = "ruff"
 version = "0.16.7"
 source = { registry = "https://pypi.org/simple" }
@@ -1493,6 +1523,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< Updated upstream
 name = "scikit-learn"
 version = "1.9.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1612,6 +1643,19 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/cf/d9/135be205d9de8783193aff9cc3bf483a03a38e4b29432c954e8cb66ac14e/scipy-1.18.1-cp315-cp315t-musllinux_1_2_x86_64.whl", hash = "sha256:179ce34a8d0fe273d8883ba59e17e052247d08973dfcb743ca52bb1cce2d60b0", size = 37521946, upload-time = "2026-08-21T23:28:35.245Z" },
     { url = "https://files.pythonhosted.org/packages/5c/a2/5b7d5270621ab7cfa3f7766067bf95dc360b5efb6394694e8143b4156e2b/scipy-1.18.1-cp315-cp315t-win_amd64.whl", hash = "sha256:5632e3ae3d09197c446310cd5187de63e28448ce22f0f67b2b93d97503c0c230", size = 37408295, upload-time = "2026-08-21T23:28:40.724Z" },
     { url = "https://files.pythonhosted.org/packages/63/ad/741c19fcb66755ff953daf9243af8480e4bf3d7fbe57583c178c7d2b6b51/scipy-1.18.1-cp315-cp315t-win_arm64.whl", hash = "sha256:eda632a7981f69730d6281f451db9c1c370993a2c0d7ddb43e2a809a2862b83a", size = 25319710, upload-time = "2026-08-21T23:28:45.713Z" },
+=======
+name = "seaborn"
+version = "0.13.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "matplotlib" },
+    { name = "numpy" },
+    { name = "pandas" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/86/59/a451d7420a77ab0b98f7affa3a1d78a313d2f7281a57afb1a34bae8ab412/seaborn-0.13.2.tar.gz", hash = "sha256:93e60a40988f4d65e9f4885df477e2fdaff6b73a9ded434c1ab356dd57eefff7", size = 1457696, upload-time = "2024-01-25T13:21:52.551Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/83/11/00d3c3dfc25ad54e731d91449895a79e4bf2384dc3ac01809010ba88f6d5/seaborn-0.13.2-py3-none-any.whl", hash = "sha256:636f8336facf092165e27924f223d3c62ca560b1f2bb5dff7ab7fad265361987", size = 294914, upload-time = "2024-01-25T13:21:49.598Z" },
+>>>>>>> Stashed changes
 ]
 
 [[package]]
@@ -1619,12 +1663,17 @@ name = "secsai-group-6"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+<<<<<<< Updated upstream
     { name = "matplotlib" },
     { name = "numpy" },
     { name = "pandas" },
     { name = "plotly" },
     { name = "scikit-learn" },
     { name = "tldextract" },
+=======
+    { name = "pandas" },
+    { name = "seaborn" },
+>>>>>>> Stashed changes
 ]
 
 [package.dev-dependencies]
@@ -1638,12 +1687,17 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+<<<<<<< Updated upstream
     { name = "matplotlib", specifier = ">=3.11.2" },
     { name = "numpy", specifier = ">=2.5.3" },
     { name = "pandas", specifier = ">=3.0.6" },
     { name = "plotly", specifier = ">=7.1.0" },
     { name = "scikit-learn", specifier = ">=1.9.1" },
     { name = "tldextract", specifier = ">=5.3.2" },
+=======
+    { name = "pandas", specifier = ">=3.0.6" },
+    { name = "seaborn", specifier = ">=0.13.2" },
+>>>>>>> Stashed changes
 ]
 
 [package.metadata.requires-dev]
@@ -1665,6 +1719,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< Updated upstream
 name = "soupsieve"
 version = "2.9.2"
 source = { registry = "https://pypi.org/simple" }
@@ -1759,6 +1814,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> Stashed changes
 name = "tzdata"
 version = "2026.4"
 source = { registry = "https://pypi.org/simple" }
@@ -1766,6 +1823,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/e4/31/3d74fa778a63b98b7
 wheels = [
     { url = "https://files.pythonhosted.org/packages/f9/bc/8737e8d54cf51106118039b83f485a4783112fab49ea9d044b234978a46e/tzdata-2026.4-py2.py3-none-any.whl", hash = "sha256:c2169a8b0a7a5e9674da5a135ccdfb2b3e671b333ed9fed17b41f73c34476e81", size = 347494, upload-time = "2026-09-12T12:56:01.67Z" },
 ]
+<<<<<<< Updated upstream
 
 [[package]]
 name = "urllib3"
@@ -1784,3 +1842,5 @@ sdist = { url = "https://files.pythonhosted.org/packages/3d/7a/f98d4ada7c499565a
 wheels = [
     { url = "https://files.pythonhosted.org/packages/39/cc/9c0adc5861020de426ec71716b6c1bef8d90694b7d6d0a16202cdb1647f5/wcwidth-0.8.4-py3-none-any.whl", hash = "sha256:2097bb1d28a0ba8fe177c2eb607317f9b1627b03f33ebebfd3da670b337a65ba", size = 299474, upload-time = "2026-09-17T23:31:43.816Z" },
 ]
+=======
+>>>>>>> Stashed changes
