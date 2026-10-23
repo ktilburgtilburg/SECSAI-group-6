@@ -7,19 +7,28 @@ The repo for the members of group 6 for the course Software Engineering for CSAI
 
 ```
 SECSAI-group-6
-├── .python-version        # Python version
-├── pyproject.toml         # dependencies + project metadata
-├── uv.lock                # exact pinned versions
-├── .venv/                 # local environment
+├── .python-version
+├── pyproject.toml
+├── uv.lock
+├── .venv/
 ├── README.md
-├── src/                   # source code
-│   ├── text/
-│   ├── image/
-│   ├── link/
-│   └── fusion/
-├── data/                  # datasets
-├── notebooks/             # exploration
-└── tests/                 # pytest tests
+├── docs/
+│   └── api_spec.md
+├── src/
+│   ├── __init__.py
+│   ├── backend/               # Backend
+│   │   ├── __init__.py
+│   │   ├── app.py
+│   │   ├── validation.py
+│   │   ├── stub_model.py
+│   │   └── db.py
+│   ├── ml/                    # Modelers
+│   ├── cli/                   # CLI scanner
+│   └── ...
+├── extension/                 # Frontend
+├── data/
+├── notebooks/
+└── tests/                     # Tester
 ```
 
 ---
