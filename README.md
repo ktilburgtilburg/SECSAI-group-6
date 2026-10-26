@@ -1,6 +1,10 @@
 # SECSAI-group-6
 The repo for the members of group 6 for the course Software Engineering for CSAI
 
+Run the Week 1 prototype suite with `uv run pytest`. See
+[tests/README.md](tests/README.md) for the URL corpus, contract coverage, and
+prototype limitations. GitHub Actions runs the suite on pushes and pull requests.
+
 ---
 
 ## Project layout
