@@ -7,6 +7,7 @@ from secsai_group_6.ml.dataset import (
     save_features,
 )
 from secsai_group_6.ml.features import extract_features, feature_names
+from secsai_group_6.ml.predict import predict
 
 __all__ = [
     "build_features",
@@ -14,5 +15,6 @@ __all__ = [
     "extract_features",
     "feature_names",
     "load_data",
+    "predict",
     "save_features",
 ]
