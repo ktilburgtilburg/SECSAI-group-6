@@ -75,6 +75,7 @@ def predict(url: str) -> dict:
         }
     """
     model, classes = _load()
+    model.n_jobs = 1
 
     feats = extract_features(url)
     names = feature_names()
