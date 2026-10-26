@@ -2,7 +2,7 @@ import logging
 
 from flask import Flask, request
 from flask_cors import CORS
-from secsai_group_6.backend.stub_model import predict
+from secsai_group_6.ml.predict import predict
 from werkzeug.exceptions import HTTPException
 
 logger = logging.getLogger(__name__)
