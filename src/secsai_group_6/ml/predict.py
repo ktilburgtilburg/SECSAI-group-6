@@ -1,7 +1,4 @@
-"""Predict whether a URL is malicious, with rule-based explanations.
-
-Matches the contract the backend expects (see backend/stub_model.py):
-    {is_malicious, category, confidence, explanations}
+"""Predict whether a URL is malicious.
 
 Loads a trained RandomForest from models/classifier.joblib. The model
 predicts one of four classes: 'benign', 'defacement', 'malware', 'phishing'.

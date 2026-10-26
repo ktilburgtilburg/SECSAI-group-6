@@ -93,9 +93,9 @@ def build_features(clean_df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray, list
 
     # Safety check
     if np.isnan(X).any():
-        raise ValueError("X contains NaN — a feature is buggy")
+        raise ValueError("X contains NaN")
     if np.isinf(X).any():
-        raise ValueError("X contains Inf — a feature is buggy")
+        raise ValueError("X contains Inf")
 
     return X, y, names
 

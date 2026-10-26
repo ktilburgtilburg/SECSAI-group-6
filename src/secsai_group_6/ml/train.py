@@ -1,9 +1,6 @@
 """Train a phishing URL classifier on handcrafted features.
 
-Usage:
-    uv run python -m secsai_group_6.ml.train
-
-Reads X.npy / y.npy from data/processed/ (built by dataset.build_features),
+Reads X.npy / y.npy from data/processed/ ,
 trains a RandomForestClassifier, saves the model to models/classifier.joblib,
 and prints a validation classification report.
 """

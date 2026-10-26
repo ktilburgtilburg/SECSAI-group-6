@@ -1,11 +1,4 @@
-"""Turn a URL into a table of numeric features.
-
-Used by the modeler to train a phishing classifier, and by predict()
-to classify a single new URL.
-
-After calling extract_features(url) you get a dict. The key order is
-stable — get it via feature_names() when building a training matrix.
-"""
+"""Turn a URL into a table of numeric features."""
 
 import ipaddress
 import math
@@ -28,15 +21,7 @@ SENSITIVE_WORDS = (
 
 
 def text_randomness(text):
-    """How random a piece of text looks, in bits per character.
-
-    - ""      -> 0.0
-    - "aaaa"  -> 0.0   (all same char)
-    - "abab"  -> 1.0   (2 equally likely chars)
-    - "abcd"  -> 2.0   (4 equally likely chars)
-
-    Higher = more random-looking (typical of bot-generated domains).
-    """
+    """How random a piece of text looks, in bits per character."""
     if not text:
         return 0.0
     counts = Counter(text)
@@ -45,7 +30,7 @@ def text_randomness(text):
 
 
 def is_ip_address(host):
-    """True if host is an IPv4 or IPv6 address literal (e.g. 192.168.1.1)."""
+    """True if host is an IPv4 or IPv6 address"""
     try:
         ipaddress.ip_address(host.strip("[]"))
         return True
@@ -54,10 +39,7 @@ def is_ip_address(host):
 
 
 def extract_features(url):
-    """Turn one URL into a dict of numeric features.
-
-    Never raises on bad input; malformed URLs give zeros/defaults.
-    """
+    """Turn one URL into a dict of numeric features."""
     try:
         parts = urlparse(url)
     except ValueError:
