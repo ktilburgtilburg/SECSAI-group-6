@@ -165,3 +165,33 @@ for name, mask in [
     print(f"\n{name}: {mask.sum()} URLs")
     print(f"Category error rate: {category_error:.2f}%")
     print(f"Binary error rate: {binary_error:.2f}%")
+
+
+print("\n=== False negative analysis ===")
+
+# Malicious URLs incorrectly predicted as benign
+false_negatives = (
+    (y_val != "benign") &
+    (predictions == "benign")
+)
+
+# False negatives not flagged as uncertain
+missed_without_warning = (
+    false_negatives & ~combined_uncertain
+)
+
+total_malicious = np.sum(y_val != "benign")
+total_false_negatives = np.sum(false_negatives)
+unflagged_false_negatives = np.sum(missed_without_warning)
+
+print(f"Actual malicious URLs: {total_malicious}")
+print(f"False negatives: {total_false_negatives}")
+print(f"False negatives flagged uncertain: "
+      f"{np.sum(false_negatives & combined_uncertain)}")
+print(f"False negatives NOT flagged: "
+      f"{unflagged_false_negatives}")
+
+print(
+    f"Malicious URL miss rate: "
+    f"{total_false_negatives / total_malicious * 100:.2f}%"
+)
