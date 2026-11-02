@@ -1,3 +1,5 @@
+const bypassedUrls = new Set()
+
 function isInternalOrLocalWeb(urlString) {
     try {
         const parsed = new URL(urlString);
@@ -8,6 +10,14 @@ function isInternalOrLocalWeb(urlString) {
         if (parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1') {
             return true;
         }
+        if ((parsed.hostname === 'google.com' || parsed.hostname === 'www.google.com') && (parsed.pathname === '/' || parsed.pathname === '')) {
+            return true;
+        }
+
+        if (bypassedUrls.has(urlString)) {
+            return true;
+        }
+
 
         // Not internal or local!
         return false;
@@ -17,7 +27,7 @@ function isInternalOrLocalWeb(urlString) {
     }
 }
 
-async function assessUrl(url) {
+async function assessUrl(url, tabId) {
     try {
         const startTime = performance.now();
 
@@ -35,7 +45,26 @@ async function assessUrl(url) {
         const data = await response.json();
         const duration = performance.now() - startTime;
 
+        if (data.is_malicious) {
+            console.warn(`[BLOCKED] Threat detected on tab ${tabId}: ${url}`);
+
+            const baseUrl = (chrome.runtime && chrome.runtime.getURL)
+                ? chrome.runtime.getURL("warning.html")
+                : "warning.html";
+
+            const warningUrl = baseUrl +
+                `?url=${encodeURIComponent(url)}` +
+                `&category=${encodeURIComponent(data.category)}` +
+                `&confidence=${encodeURIComponent(data.confidence)}` +
+                `&explanations=${encodeURIComponent(JSON.stringify(data.explanations || []))}`;
+
+            if (chrome.tabs && chrome.tabs.update) {
+                chrome.tabs.update(tabId, { url: warningUrl });
+            }
+        }
+
         console.log(`[Verdict] ${url} -> ${data.category} (malicious: ${data.is_malicious}) [${duration.toFixed(1)}ms]`);
+
     } catch (error) {
         console.error("Failed to assess URL:", error);
     }
@@ -53,5 +82,15 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
     }
     console.log("Navigation link found:", details.url)
 
-    assessUrl(details.url)
+    assessUrl(details.url, details.tabId)
 });
+
+if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.onMessage) {
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        if (message.action === "bypass" && message.url) {
+            bypassedUrls.add(message.url);
+            sendResponse({ success: true });
+        }
+    });
+}
+
