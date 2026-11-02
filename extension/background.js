@@ -1,3 +1,5 @@
+const bypassedUrls = new Set()
+
 function isInternalOrLocalWeb(urlString) {
     try {
         const parsed = new URL(urlString);
@@ -8,6 +10,14 @@ function isInternalOrLocalWeb(urlString) {
         if (parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1') {
             return true;
         }
+        if ((parsed.hostname === 'google.com' || parsed.hostname === 'www.google.com') && (parsed.pathname === '/' || parsed.pathname === '')) {
+            return true;
+        }
+
+        if (bypassedUrls.has(urlString)) {
+            return true;
+        }
+
 
         // Not internal or local!
         return false;
