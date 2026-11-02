@@ -48,15 +48,21 @@ async function assessUrl(url, tabId) {
         if (data.is_malicious) {
             console.warn(`[BLOCKED] Threat detected on tab ${tabId}: ${url}`);
 
-            const warningUrl = chrome.runtime.getURL("warning.html") +
+            const baseUrl = (chrome.runtime && chrome.runtime.getURL)
+                ? chrome.runtime.getURL("warning.html")
+                : "warning.html";
+
+            const warningUrl = baseUrl +
                 `?url=${encodeURIComponent(url)}` +
                 `&category=${encodeURIComponent(data.category)}` +
                 `&confidence=${encodeURIComponent(data.confidence)}` +
                 `&explanations=${encodeURIComponent(JSON.stringify(data.explanations || []))}`;
 
-            chrome.tabs.update(tabId, { url: warningUrl });
-
+            if (chrome.tabs && chrome.tabs.update) {
+                chrome.tabs.update(tabId, { url: warningUrl });
+            }
         }
+
         console.log(`[Verdict] ${url} -> ${data.category} (malicious: ${data.is_malicious}) [${duration.toFixed(1)}ms]`);
 
     } catch (error) {
@@ -79,10 +85,12 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
     assessUrl(details.url, details.tabId)
 });
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.action === "bypass" && message.url) {
-        bypassedUrls.add(message.url);
-        sendResponse({ success: true });
-    }
-});
+if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.onMessage) {
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        if (message.action === "bypass" && message.url) {
+            bypassedUrls.add(message.url);
+            sendResponse({ success: true });
+        }
+    });
+}
 
