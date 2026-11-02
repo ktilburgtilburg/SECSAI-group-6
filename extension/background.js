@@ -27,7 +27,7 @@ function isInternalOrLocalWeb(urlString) {
     }
 }
 
-async function assessUrl(url) {
+async function assessUrl(url, tabId) {
     try {
         const startTime = performance.now();
 
@@ -45,7 +45,20 @@ async function assessUrl(url) {
         const data = await response.json();
         const duration = performance.now() - startTime;
 
+        if (data.is_malicious) {
+            console.warn(`[BLOCKED] Threat detected on tab ${tabId}: ${url}`);
+
+            const warningUrl = chrome.runtime.getURL("warning.html") +
+                `?url=${encodeURIComponent(url)}` +
+                `&category=${encodeURIComponent(data.category)}` +
+                `&confidence=${encodeURIComponent(data.confidence)}` +
+                `&explanations=${encodeURIComponent(JSON.stringify(data.explanations || []))}`;
+
+            chrome.tabs.update(tabId, { url: warningUrl });
+
+        }
         console.log(`[Verdict] ${url} -> ${data.category} (malicious: ${data.is_malicious}) [${duration.toFixed(1)}ms]`);
+
     } catch (error) {
         console.error("Failed to assess URL:", error);
     }
@@ -63,5 +76,13 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
     }
     console.log("Navigation link found:", details.url)
 
-    assessUrl(details.url)
+    assessUrl(details.url, details.tabId)
 });
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "bypass" && message.url) {
+        bypassedUrls.add(message.url);
+        sendResponse({ success: true });
+    }
+});
+
