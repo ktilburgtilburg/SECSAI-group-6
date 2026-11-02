@@ -1,63 +1,35 @@
-# Week 1 prototype tests
+# Test suite
 
 Run from the repository root:
 
-```bash
-uv run pytest
+```sh
+uv run --locked pytest
+node --test tests/extension_failure.test.cjs
 ```
 
-uv installs the locked dependencies, including pytest, automatically. No server,
-dataset download, trained model, credentials, or internet access is needed during
-the tests. Flask's test client calls the real application in process. An autouse
-fixture rejects socket connections and DNS lookups.
+Python tests need no running server, dataset, trained model, or credentials.
+They block network access. Flask's test client calls the application in process;
+feedback tests use temporary SQLite files and read committed rows through new
+connections. API and CLI contract tests explicitly inject the existing stub
+predictor. Model unit tests characterize that stub, not classifier accuracy.
+Both suites run in GitHub Actions; Node 22 or later is recommended locally.
 
-## URL corpus
+`fixtures/urls.json` has five benign reference URLs, three historical phishing
+URLs, and two historical malware URLs from the Malicious URLs dataset used by
+the project notebook. Labels are metadata, not expected stub outputs. Malicious
+URLs are only passed as strings; tests never visit them.
 
-`fixtures/urls.json` contains five safe reference sites (Wikipedia, GitHub,
-Python, Mozilla, Tilburg University), three historically labeled phishing URLs,
-and two historically labeled malware URLs. The five malicious examples are the
-first three phishing and first two malware rows in the local
-`data/malicious_phish.csv` used by `notebooks/phishing_URL_EDA.ipynb`.
-The notebook identifies its source as the
-[Malicious URLs dataset](https://www.kaggle.com/datasets/sid321axn/malicious-urls-dataset).
-The original URL strings, including absent schemes, are preserved. The small
-JSON fixture is checked in so tests do not depend on the ignored CSV.
+The extension test evaluates the actual background script in Node with mocked
+Chrome events and fetch. It verifies repeated connection failures, HTTP errors,
+invalid JSON, navigation filtering, and recovery without unhandled errors.
+It does not replace a browser test.
 
-These are historical dataset labels, not a claim about current site contents.
-Do not open the malicious examples. Tests pass them only as strings to the
-local model and API.
+For real model timings, run separately with the intended trained artifacts:
 
-## What passing means
+```sh
+uv run --locked python scripts/benchmark_scan.py --rounds 100
+```
 
-The suite checks the `docs/api_spec.md` response contract: exact fields, JSON
-types, finite confidence within [0, 1], a supported category (`benign`,
-`phishing`, `malware`, `defacement`), and consistency with `is_malicious`.
-Every corpus URL exercises both the real assess endpoint and the real stub
-prediction function. Additional tests cover health, malformed requests, JSON
-HTTP errors, trimmed URL forwarding, and model failures.
-
-The corpus `category` is ground truth metadata, not an expected Week 1 output.
-The Week 1 stub classifies only URLs containing `login` as phishing and all
-others as benign. Its two branches and case handling are tested explicitly.
-Passing contract tests does **not** establish detection accuracy on these
-historical threats. Add separate accuracy tests when a trained model replaces
-the stub; do not rewrite these labels to match the stub.
-
-Feedback is documented but is not implemented on this baseline, so it is not
-included in the Week 1 suite.
-
-## Repository and GitHub baseline
-
-- Branch `test/week1-prototype-suite` starts from `origin/dev` at `1076b46`
-  (`BE: add assess endpoint`), which contains the Week 1 Flask API and stub.
-- `origin/main` at inspection contains notebooks and a placeholder package;
-  `origin/feature/mvp-prototype` has a separate, larger implementation. This
-  suite targets the documented Week 1 API on `dev`.
-- The baseline has pytest and Flask dependencies locked, but no tests,
-  pytest configuration, or GitHub Actions workflow.
-- `.github/workflows/tests.yml` now runs the same command on pushes and pull
-  requests, using Python 3.12 and `uv sync --locked`. Failed tests fail the job.
-- Remote branch protection and required-check settings were not inspected or
-  changed. GitHub execution can be confirmed after the branch is pushed.
-
-Local validation: `uv run pytest` on Python 3.12.13: **45 passed**.
+The command fails if the model is missing or the mean is >=50 ms. It never uses
+the stub. See [the test-results document](../docs/speed-failure-results.md) for
+recorded results, measurement scope, and the backend-stop browser procedure.

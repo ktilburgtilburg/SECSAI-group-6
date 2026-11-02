@@ -1,4 +1,13 @@
+import pytest
+
 from secsai_group_6.cli import main
+
+
+@pytest.fixture(autouse=True)
+def stub_cli_prediction(monkeypatch):
+    from secsai_group_6.backend.stub_model import predict
+
+    monkeypatch.setattr("secsai_group_6.cli.predict", predict)
 
 
 def test_safe_url_exits_0(capsys):
