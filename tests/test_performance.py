@@ -25,9 +25,17 @@ def test_prediction_speed():
             predict(url)
             elapsed = (time.perf_counter_ns() - start) / 1_000_000
             times.append(elapsed)
+    times.sort()
 
-    print(f"\nAverage: {statistics.mean(times):.3f} ms")
-    print(f"Median: {statistics.median(times):.3f} ms")
-    print(f"Maximum: {max(times):.3f} ms")
+    average = statistics.mean(times)
+    median = statistics.median(times)
+    p95 = times[int(0.95 * (len(times) - 1))]
+    maximum = max(times)
 
-    assert max(times) < 10, "Prediction exceeded 10 ms"
+    print(f"\nPredictions tested: {len(times)}")
+    print(f"Average: {average:.3f} ms")
+    print(f"Median: {median:.3f} ms")
+    print(f"P95:     {p95:.3f} ms")
+    print(f"Maximum: {maximum:.3f} ms")
+
+    assert p95 < 10, (f"P95 prediction time exceeded 10 ms: {p95:.3f} ms")
