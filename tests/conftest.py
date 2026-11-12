@@ -32,6 +32,11 @@ def api_module():
 
 @pytest.fixture
 def client(api_module, monkeypatch):
+    # API contract tests are independent of the ignored trained-model artifact.
+    # The speed benchmark deliberately uses the real model instead.
+    from secsai_group_6.backend.stub_model import predict
+
+    monkeypatch.setattr(api_module, "predict", predict)
     monkeypatch.setitem(api_module.app.config, "TESTING", True)
     with api_module.app.test_client() as client:
         yield client

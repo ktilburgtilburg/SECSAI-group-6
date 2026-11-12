@@ -15,5 +15,10 @@ jobs:
           enable-cache: true
       - name: Install locked dependencies
         run: uv sync --locked --python 3.12
-      - name: Test Week 1 prototype
+      - name: Test Python suite
         run: uv run pytest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test extension outage handling
+        run: node --test tests/extension_failure.test.cjs

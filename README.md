@@ -1,122 +1,70 @@
 # SECSAI-group-6
-The repo for the members of group 6 for the course Software Engineering for CSAI
 
-Run the Week 1 prototype suite with `uv run pytest`. See
-[tests/README.md](tests/README.md) for the URL corpus, contract coverage, and
-prototype limitations. GitHub Actions runs the suite on pushes and pull requests.
-
----
-
-## Project layout
-
-```
-SECSAI-group-6
-├── .python-version
-├── pyproject.toml
-├── uv.lock
-├── .venv/
-├── README.md
-├── docs/
-│   └── api_spec.md
-├── src/
-│   ├── __init__.py
-│   ├── backend/               # Backend
-│   │   ├── __init__.py
-│   │   ├── app.py
-│   │   ├── validation.py
-│   │   ├── stub_model.py
-│   │   └── db.py
-│   ├── ml/                    # Modelers
-│   ├── cli/                   # CLI scanner
-│   └── ...
-├── extension/                 # Frontend
-├── data/
-├── notebooks/
-└── tests/                     # Tester
-```
-
----
+URL threat assessment: a local API, a CLI scanner, and a browser extension.
+Group 6, Software Engineering for CSAI.
 
 ## Set up
 
-### 1. Install uv
+1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/):
 
-**macOS / Linux:**
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
+   ```bash
+   # macOS / Linux
+   curl -LsSf https://astral.sh/uv/install.sh | sh
 
-**Windows (PowerShell):**
-```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
+   # Windows (PowerShell)
+   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+   ```
 
-**Alternatives**, if you'd rather use a package manager you already have:
-```bash
-# macOS (Homebrew)
-brew install uv
+   Reopen your terminal and check with `uv --version`.
 
-# Windows (winget)
-winget install --id=astral-sh.uv -e
+2. Clone and install:
 
-# Any OS, if you already have pip somewhere
-pip install uv
-```
+   ```bash
+   git clone https://github.com/ktilburgtilburg/SECSAI-group-6.git
+   cd SECSAI-group-6
+   uv sync
+   ```
 
-After installing, **close and reopen your terminal**, then check it worked:
-```bash
-uv --version
-```
+## Run
 
-To update uv later:
-```bash
-uv self update
-```
-
-### 2. Get the project and set up the environment
-
-Clone the repo, then let uv build the environment from the lockfile.
-```bash
-git clone https://github.com/ktilburgtilburg/SECSAI-group-6.git
-cd SECSAI-group-6
-uv sync
-```
-
-### 3. Running code
-
-Prefix commands with `uv run` and they execute inside the project environment automatically - no activation needed:
+Prefix everything with `uv run`. No environment activation needed.
 
 ```bash
-uv run python main.py            # run a script
-uv run python -m src.detector    # run a module
-uv run pytest                    # run the tests
-uv run jupyter lab               # start a notebook server
+# Start the API server (http://127.0.0.1:5000)
+uv run flask --app secsai_group_6.backend.app run --host 127.0.0.1 --port 5000 --debug
+
+# Scan a URL from the terminal (exit code: 0 safe, 1 threat, 2 error)
+uv run secsai --check https://example.com
+
+# Run the tests
+uv run pytest
 ```
 
-### 4. Adding, removing, and updating dependencies
+The API contract is in [docs/api_spec.md](docs/api_spec.md). Test details are in
+[tests/README.md](tests/README.md). GitHub Actions runs the tests on every push and pull request.
 
-Always manage packages through uv so `pyproject.toml` and `uv.lock` stay in sync. **After changing dependencies, commit both files** so teammates get the update on their next `uv sync`.
+## Dependencies
 
 ```bash
-# Add a runtime dependency
-uv add pillow                 # e.g. image handling
-uv add "transformers>=4.40"   # version constraints work too
-
-# Add a dev-only dependency (tests, linting - not shipped)
-uv add --dev pytest ruff
-
-# Remove a dependency
-uv remove pillow
-
-# Update everything to the newest allowed versions and re-lock
-uv lock --upgrade
-uv sync
+uv add <package>         # add a dependency
+uv add --dev <package>   # add a dev-only dependency
+uv sync                  # after pulling someone else's changes
 ```
 
-When a teammate has pushed new dependencies and you pull their changes, just run:
-```bash
-uv sync
-```
-to bring your environment back in line with the updated lockfile.
+Commit both `pyproject.toml` and `uv.lock` after changing dependencies.
 
----
+## Layout
+
+```
+SECSAI-group-6
+├── docs/api_spec.md
+├── src/secsai_group_6/
+│   ├── backend/        # Flask API: app.py, validation.py, db.py, stub_model.py
+│   ├── ml/             # model and features
+│   ├── categories.py   # the four verdict categories
+│   └── cli.py          # terminal scanner
+├── extension/          # browser extension
+├── data/
+├── notebooks/
+└── tests/
+```

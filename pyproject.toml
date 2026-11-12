@@ -21,6 +21,7 @@ dependencies = [
 
 [project.scripts]
 secsai-group-6 = "secsai_group_6:main"
+secsai = "secsai_group_6.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.12.15,<0.13.0"]

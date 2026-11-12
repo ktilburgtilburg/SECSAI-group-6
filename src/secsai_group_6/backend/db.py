@@ -1,0 +1,50 @@
+from contextlib import closing
+from datetime import datetime, timezone
+from pathlib import Path
+import sqlite3
+
+from secsai_group_6.categories import Category
+
+
+class StorageError(Exception):
+    """Feedback could not be stored."""
+
+
+_SCHEMA = """ 
+CREATE TABLE IF NOT EXISTS feedback (
+    id INTEGER PRIMARY KEY,
+    url TEXT NOT NULL,
+    shown_category TEXT NOT NULL,
+    reported_category TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    UNIQUE (url, shown_category, reported_category)
+)
+"""
+
+_INSERT = """ 
+INSERT INTO feedback (url, shown_category, reported_category, created_at)
+VALUES (?, ?, ?, ?)
+ON CONFLICT DO NOTHING
+"""
+
+
+def save_feedback(
+    db_path: Path | str,
+    url: str,
+    shown_category: Category,
+    reported_category: Category,
+) -> bool:
+    """Store a report. Returns True if new, False if it was already reported."""
+    created_at = datetime.now(timezone.utc).isoformat()
+    try:
+        with closing(sqlite3.connect(db_path)) as conn:
+            with conn:
+                conn.execute(_SCHEMA)
+                cur = conn.execute(
+                    _INSERT,
+                    (url, shown_category.value, reported_category.value, created_at),
+                )
+                inserted = cur.rowcount == 1
+    except sqlite3.Error as exc:
+        raise StorageError("Could not save feedback") from exc
+    return inserted

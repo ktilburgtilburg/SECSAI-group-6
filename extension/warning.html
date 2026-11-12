@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Warning - SECSAI Link Guard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="warning.css">
+</head>
+
+<body>
+    <div class="card-wrap">
+        <div class="card-gradient">
+            <div class="card-inner">
+                <!-- Left Column: Gold Shield Seal & Ref ID -->
+                <div class="seal-column">
+                    <div class="seal-circle">
+                        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#131d45" stroke-width="1.7">
+                            <path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"></path>
+                            <path d="M12 8v5M12 16v.5" stroke-linecap="round"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Right Column: Content & Actions -->
+                <div class="content-column">
+                    <div class="header-group">
+                        <span class="eyebrow">Threat Intercepted</span>
+                        <h1 class="title">Suspicious link blocked</h1>
+                        <p class="description">Link Guard intercepted an active threat before your connection was
+                            established. Access is paused for your safety.</p>
+                    </div>
+
+                    <!-- 3-Column Ledger -->
+                    <div class="ledger-grid">
+                        <div class="ledger-item">
+                            <span class="ledger-label">Type</span>
+                            <span id="threat-badge" class="ledger-value threat-val">PHISHING</span>
+                        </div>
+                        <div class="ledger-item border-left">
+                            <span class="ledger-label">Confidence</span>
+                            <span id="confidence-level" class="ledger-value">--%</span>
+                        </div>
+                        <div class="ledger-item border-left">
+                            <span class="ledger-label">Destination</span>
+                            <span id="blocked-url" class="ledger-value mono-val">...</span>
+                        </div>
+                    </div>
+
+                    <!-- Reasons Bullet Points -->
+                    <div class="reasons-section">
+                        <span class="reasons-label">Indicators detected:</span>
+                        <ul id="reasons-list">
+                            <!-- Populated by warning.js -->
+                        </ul>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="button-row">
+                        <button id="btn-back" class="btn btn-gold">Cancel &amp; Go Back</button>
+                        <button id="btn-bypass" class="btn btn-outline">Proceed Anyway</button>
+                    </div>
+
+                    <div class="footer-row">
+                        <button id="btn-feedback" class="btn-text">Report false positive</button>
+                        <span id="feedback-message" class="feedback-status"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="warning.js"></script>
+</body>
+
+</html>
