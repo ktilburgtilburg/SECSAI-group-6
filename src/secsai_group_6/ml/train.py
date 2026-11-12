@@ -37,8 +37,8 @@ def main():
     print(f"  train: {len(X_train)}  val: {len(X_val)}  test: {len(X_test)}")
 
     # Train
-    print("training RandomForest (50 trees)...")
-    model = RandomForestClassifier(n_estimators=50, n_jobs=-1, random_state=42)
+    print("training RandomForest (100 trees)...")
+    model = RandomForestClassifier(n_estimators=100, n_jobs=-1, random_state=42)
     model.fit(X_train, y_train)
 
     # Validate
