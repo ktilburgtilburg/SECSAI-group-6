@@ -70,6 +70,11 @@ body {
     box-shadow: 0 0 8px #22c55e;
 }
 
+.dot.degraded {
+    background: #f97316;
+    box-shadow: 0 0 8px #f97316;
+}
+
 .dot.offline {
     background: #ef4444;
     box-shadow: 0 0 8px #ef4444;
@@ -177,6 +182,12 @@ input[type="text"]:focus {
     background: rgba(239, 68, 68, 0.2);
     color: #f87171;
     border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.result-badge.neutral {
+    background: rgba(148, 163, 184, 0.2);
+    color: #cbd5e1;
+    border: 1px solid rgba(148, 163, 184, 0.4);
 }
 
 .result-confidence {
