@@ -10,7 +10,7 @@ function isInternalOrLocalWeb(urlString) {
         if (parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1') {
             return true;
         }
-        if ((parsed.hostname === 'google.com' || parsed.hostname === 'www.google.com') && (parsed.pathname === '/' || parsed.pathname === '')) {
+        if (parsed.hostname === 'google.com' || parsed.hostname.endsWith('.google.com')) {
             return true;
         }
 

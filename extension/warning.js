@@ -32,10 +32,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 1. Cancel & Go Back Button
     document.getElementById("btn-back").addEventListener("click", () => {
-        if (window.history.length > 1) {
-            window.history.back();
+        if (window.history.length > 2) {
+            // Skip the blocked page in history and go back to the safe page before it
+            window.history.go(-2);
+        } else if (document.referrer && !document.referrer.includes(targetUrl)) {
+            window.location.href = document.referrer;
         } else {
-            window.close();
+            // Fallback: safe home page or close tab
+            window.location.href = "https://www.google.com";
         }
     });
 
