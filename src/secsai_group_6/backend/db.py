@@ -27,6 +27,17 @@ VALUES (?, ?, ?, ?)
 ON CONFLICT DO NOTHING
 """
 
+_LOG_SCHEMA = """
+CREATE TABLE IF NOT EXISTS request_log (
+    id INTEGER PRIMARY KEY,
+    created_at TEXT NOT NULL,
+    status INTEGER NOT NULL,
+    category TEXT,
+    latency_ms INTEGER NOT NULL,
+    worker_id TEXT
+)
+"""
+
 
 def save_feedback(
     db_path: Path | str,
@@ -48,3 +59,25 @@ def save_feedback(
     except sqlite3.Error as exc:
         raise StorageError("Could not save feedback") from exc
     return inserted
+
+
+def log_request(
+    db_path: Path | str,
+    status: int,
+    latency_ms: int,
+    category: str | None = None,
+    worker_id: str | None = None,
+) -> None:
+    """Record one /assess call. Stores no URL."""
+    created_at = datetime.now(timezone.utc).isoformat()
+    try:
+        with closing(sqlite3.connect(db_path)) as conn:
+            with conn:
+                conn.execute(_LOG_SCHEMA)
+                conn.execute(
+                    "INSERT INTO request_log (created_at, status, category, latency_ms, worker_id) "
+                    "VALUES (?, ?, ?, ?, ?)",
+                    (created_at, status, category, latency_ms, worker_id),
+                )
+    except sqlite3.Error as exc:
+        raise StorageError("Could not log request") from exc

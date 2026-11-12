@@ -25,6 +25,13 @@ Group 6, Software Engineering for CSAI.
    uv sync
    ```
 
+3. Build the docker image and run:
+   ```bash
+   docker build -t secsai-interface .
+   docker run --rm -p 127.0.0.1:5000:5000 -v secsai-data:/data \
+   -e RABBITMQ_URL=amqp://guest:guest@host.docker.internal:5672/ secsai-interface
+   ```
+
 ## Run
 
 Prefix everything with `uv run`. No environment activation needed.

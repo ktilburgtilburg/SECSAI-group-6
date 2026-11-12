@@ -14,7 +14,7 @@ Check if the server is online.
 
 **Response (200)**
 ```json
-{"status": "ok"}
+{"api": "ok", "queue": "ok"}
 ```
 
 ---
@@ -50,7 +50,9 @@ Check a URL and get a threat verdict.
 | Status | When                                                                              |
 |--------|-----------------------------------------------------------------------------------|
 | 400    | Body is not a JSON object (or wrong Content-Type), `url` missing, not a string, empty, or longer than 2048 characters |
-| 500    | The model failed: `{"error": "Prediction failed"}`                                |
+| 502    | Invalid reply from the model                                |
+| 503    | Queue unreachable                                |
+| 504    | No reply withing the timeout                                |
 
 On a 500 the extension decides whether to fail open or closed. The backend never
 returns a made-up verdict.

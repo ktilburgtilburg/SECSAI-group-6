@@ -1,9 +1,18 @@
 import logging
 from pathlib import Path
+import time
 
 from flask import Flask, request
 from flask_cors import CORS
-from secsai_group_6.backend.db import StorageError, save_feedback
+from secsai_group_6.backend.db import StorageError, log_request, save_feedback
+from secsai_group_6.backend.rpc_client import (
+    BadReply,
+    QueueError,
+    QueueTimeout,
+    QueueUnavailable,
+    queue_is_up,
+    rpc_assess,
+)
 from secsai_group_6.backend.validation import (
     InvalidInput,
     clean_category,
@@ -11,12 +20,18 @@ from secsai_group_6.backend.validation import (
     json_object,
     redact_url,
 )
-from secsai_group_6.ml.predict import predict
 from werkzeug.exceptions import HTTPException
 
 logger = logging.getLogger(__name__)
 
 API_PREFIX = "/api/v1"
+
+# What each queue failure means to the client.
+UPSTREAM_ERRORS = {
+    QueueUnavailable: (503, "Prediction service unavailable"),
+    QueueTimeout: (504, "Prediction service timed out"),
+    BadReply: (502, "Invalid reply from prediction service"),
+}
 
 app = Flask(__name__)
 CORS(app)
@@ -46,7 +61,7 @@ def handle_http_exception(exc: HTTPException):
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {"status": "ok", "queue": "ok" if queue_is_up() else "down"}
 
 
 @app.post(f"{API_PREFIX}/assess")
@@ -54,11 +69,18 @@ def assess():
     body = json_object(request.get_json(silent=True))
     url = clean_url(body.get("url"))
 
+    started = time.perf_counter()
     try:
-        return predict(url)
-    except Exception:
-        logger.exception("predict() failed")
-        return error("Prediction failed", 500)
+        verdict, worker_id = rpc_assess(url)
+    except QueueError as exc:
+        status, message = UPSTREAM_ERRORS.get(
+            type(exc), (502, "Prediciton service error")
+        )
+        logger.warning("assess failed: %s (%s)", type(exc).__name__, exc)
+        _record(started, status)
+        return error(message, status)
+    _record(started, 200, verdict["category"], worker_id)
+    return verdict
 
 
 @app.post(f"{API_PREFIX}/feedback")
@@ -70,3 +92,12 @@ def feedback():
 
     saved = save_feedback(app.config["DB_PATH"], url, shown, reported)
     return {"status": "saved" if saved else "duplicate"}
+
+
+def _record(started, status, category=None, worker_id=None):
+    latency_ms = round((time.perf_counter() - started) * 1000)
+    try:
+        log_request(app.config["DB_PATH"], status, latency_ms, category, worker_id)
+    except StorageError:
+        # Never fail a request over logging.
+        logger.warning("Could not write request log", exc_info=True)
