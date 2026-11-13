@@ -14,6 +14,7 @@ RUN uv sync --locked --no-dev --no-install-project
 
 # 2) Then the source.
 COPY src ./src
+COPY scripts ./scripts
 RUN uv sync --locked --no-dev
 
 ENV PATH="/app/.venv/bin:$PATH" \

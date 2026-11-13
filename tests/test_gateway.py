@@ -19,7 +19,8 @@ GOOD = {
 
 
 @pytest.fixture
-def client():
+def client(tmp_path, monkeypatch):
+    monkeypatch.setitem(app_module.app.config, "DB_PATH", tmp_path / "gateway.db")
     return app_module.app.test_client()
 
 
@@ -46,7 +47,7 @@ def test_queue_failures_become_gateway_errors(client, monkeypatch, exc, status):
 
 def test_health_reports_queue_state(client, monkeypatch):
     monkeypatch.setattr(app_module, "queue_is_up", lambda: False)
-    assert client.get("/health").get_json() == {"api": "ok", "queue": "down"}
+    assert client.get("/health").get_json() == {"status": "ok", "queue": "down"}
 
 
 def test_parse_reply_accepts_a_valid_verdict():
