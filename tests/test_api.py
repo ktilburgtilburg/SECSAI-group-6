@@ -25,27 +25,50 @@ def test_assess_contract(client, url_case):
     assert_verdict(response.get_json())
 
 
-@pytest.mark.parametrize("body", [
-    None, [], "url", 42, True, {}, {"url": None}, {"url": 123},
-    {"url": False}, {"url": []}, {"url": {}}, {"url": ""}, {"url": " \t\n"},
-])
+@pytest.mark.parametrize(
+    "body",
+    [
+        None,
+        [],
+        "url",
+        42,
+        True,
+        {},
+        {"url": None},
+        {"url": 123},
+        {"url": False},
+        {"url": []},
+        {"url": {}},
+        {"url": ""},
+        {"url": " \t\n"},
+    ],
+)
 def test_invalid_body(client, body):
     assert_error(client.post("/api/v1/assess", json=body), 400)
 
 
-@pytest.mark.parametrize("data, content_type", [
-    ("", "application/json"),
-    ('{"url":', "application/json"),
-    ('{"url":"https://example.test"}', "text/plain"),
-])
+@pytest.mark.parametrize(
+    "data, content_type",
+    [
+        ("", "application/json"),
+        ('{"url":', "application/json"),
+        ('{"url":"https://example.test"}', "text/plain"),
+    ],
+)
 def test_invalid_json(client, data, content_type):
-    assert_error(client.post("/api/v1/assess", data=data, content_type=content_type), 400)
+    assert_error(
+        client.post("/api/v1/assess", data=data, content_type=content_type), 400
+    )
 
 
 def test_assess_passes_trimmed_url_to_model(client, api_module, monkeypatch):
     calls = []
-    verdict = {"is_malicious": True, "category": "malware",
-               "confidence": 0.93, "explanations": ["Model reason"]}
+    verdict = {
+        "is_malicious": True,
+        "category": "malware",
+        "confidence": 0.93,
+        "explanations": ["Model reason"],
+    }
 
     def predict(url):
         calls.append(url)
@@ -69,8 +92,12 @@ def test_prediction_failure_returns_json(client, api_module, monkeypatch):
     assert response.get_json() == {"error": "Prediction failed"}
 
 
-@pytest.mark.parametrize("method, path, status", [
-    ("get", "/missing", 404), ("get", "/api/v1/assess", 405),
-])
+@pytest.mark.parametrize(
+    "method, path, status",
+    [
+        ("get", "/missing", 404),
+        ("get", "/api/v1/assess", 405),
+    ],
+)
 def test_http_errors_are_json(client, method, path, status):
     assert_error(getattr(client, method)(path), status)
