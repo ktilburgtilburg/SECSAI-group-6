@@ -6,6 +6,10 @@ WORKDIR /app
 
 COPY pyproject.toml uv.lock ./
 
+# 2) Then the source.
+COPY src ./src
+COPY scripts ./scripts
+RUN uv sync --locked --no-dev
 RUN uv sync --frozen --no-install-project
 
 COPY src/ ./src/

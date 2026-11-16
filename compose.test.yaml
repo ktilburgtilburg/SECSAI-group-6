@@ -1,0 +1,35 @@
+name: secsai-system-test
+services:
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    environment:
+      RABBITMQ_DEFAULT_USER: systemtest
+      RABBITMQ_DEFAULT_PASS: systemtest
+    healthcheck:
+      test: [CMD, rabbitmq-diagnostics, -q, ping]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+  api:
+    build: .
+    ports: ["127.0.0.1:5000:5000"]
+    environment:
+      RABBITMQ_URL: amqp://systemtest:systemtest@rabbitmq:5672/
+      DB_PATH: /data/feedback.db
+    volumes: ["feedback:/data"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+  worker:
+    build: .
+    command: [python, -u, scripts/system_worker.py]
+    environment:
+      RABBITMQ_URL: amqp://systemtest:systemtest@rabbitmq:5672/
+      WORKER_DELAY: ${WORKER_DELAY:-0.1}
+      PREDICTOR: ${PREDICTOR:-stub}
+    volumes: ["./models:/app/models:ro"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+volumes:
+  feedback:

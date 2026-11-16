@@ -1,15 +1,18 @@
 from secsai_group_6.backend.worker import RABBITMQ_PORT
 from secsai_group_6.backend.worker import RABBITMQ_HOST
 import logging
+import os
 import pika
 import uuid
 import time
 import json
 from pathlib import Path
-import time
+
 
 from flask import Flask, request
 from flask_cors import CORS
+from werkzeug.exceptions import HTTPException
+
 from secsai_group_6.backend.db import StorageError, log_request, save_feedback
 from secsai_group_6.backend.rpc_client import (
     BadReply,
@@ -26,7 +29,6 @@ from secsai_group_6.backend.validation import (
     json_object,
     redact_url,
 )
-from werkzeug.exceptions import HTTPException
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +43,9 @@ UPSTREAM_ERRORS = {
 
 app = Flask(__name__)
 CORS(app)
-app.config.setdefault("DB_PATH", Path(__file__).with_name("feedback.db"))
+app.config.setdefault(
+    "DB_PATH", os.environ.get("DB_PATH", Path(__file__).with_name("feedback.db"))
+)
 
 ### Check if RABBITMQ is up
 
