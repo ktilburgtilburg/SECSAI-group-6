@@ -2,27 +2,22 @@ FROM python:3.12-slim
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-ENV UV_COMPILE_BYTECODE=1 \
-    UV_LINK_MODE=copy \
-    UV_PYTHON_DOWNLOADS=never
-
 WORKDIR /app
 
-# 1) Dependencies first: this layer is cached until pyproject.toml / uv.lock change.
-COPY pyproject.toml uv.lock .python-version README.md ./
-RUN uv sync --locked --no-dev --no-install-project
+COPY pyproject.toml uv.lock ./
 
 # 2) Then the source.
 COPY src ./src
 COPY scripts ./scripts
 RUN uv sync --locked --no-dev
+RUN uv sync --frozen --no-install-project
 
-ENV PATH="/app/.venv/bin:$PATH" \
-    DB_PATH=/data/feedback.db
+COPY src/ ./src/
+# Might have to change this since I don't have model on my system and I don't know where it is lol
+COPY models/ ./models/
+COPY README.md ./
 
-RUN useradd --create-home app && mkdir /data && chown app /data
-USER app
-VOLUME /data
+RUN uv sync --frozen
 
-EXPOSE 5000
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--threads", "4", "secsai_group_6.backend.app:app"]
+ENV PYTHONUNBUFFERED=1
+ENV PATH="/app/.venv/bin:$PATH"
