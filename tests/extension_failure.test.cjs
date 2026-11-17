@@ -37,3 +37,31 @@ test('navigation survives backend outage, bad responses, and recovery', async ()
     listener({ frameId: 0, url: 'chrome://settings' });
     assert.equal(calls, 23);
 });
+
+test('extension handles the stopped composed broker over real HTTP', {
+    skip: !process.env.SYSTEM_OUTAGE_URL,
+}, async () => {
+    let listener;
+    const errors = [];
+    const pending = [];
+    const context = vm.createContext({
+        URL, performance,
+        console: { log() {}, error: (...args) => errors.push(args) },
+        chrome: { webNavigation: { onBeforeNavigate: { addListener: fn => { listener = fn; } } } },
+        fetch: (_url, options) => {
+            const call = fetch(process.env.SYSTEM_OUTAGE_URL + '/api/v1/assess', {
+                ...options, signal: AbortSignal.timeout(10000),
+            });
+            pending.push(call);
+            return call;
+        },
+    });
+    vm.runInContext(fs.readFileSync('extension/background.js', 'utf8'), context);
+    for (let i = 0; i < 20; i++) {
+        listener({ frameId: 0, url: 'https://example.test/' });
+        await Promise.all(pending);
+        await new Promise(resolve => setImmediate(resolve));
+    }
+    assert.equal(errors.length, 20);
+    assert.ok(errors.every(args => String(args[0]).includes('503')));
+});
