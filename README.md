@@ -1,99 +1,80 @@
-# SECSAI-group-6
+# SECSAI — Real-Time URL Phishing & Threat Detector
 
-URL threat assessment: a local API, a CLI scanner, and a browser extension.
-Group 6, Software Engineering for CSAI.
-
-## Set up
-
-1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/):
-
-   ```bash
-   # macOS / Linux
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-
-   # Windows (PowerShell)
-   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-   ```
-
-   Reopen your terminal and check with `uv --version`.
-
-2. Clone and install:
-
-   ```bash
-   git clone https://github.com/ktilburgtilburg/SECSAI-group-6.git
-   cd SECSAI-group-6
-   uv sync
-   ```
-
-## Run (Local Development)
-
-Prefix everything with `uv run`. No environment activation needed.
-
-```bash
-# Start the API server (http://127.0.0.1:5000)
-uv run flask --app secsai_group_6.backend.app run --host 127.0.0.1 --port 5000 --debug
-
-# Scan a URL from the terminal (exit code: 0 safe, 1 threat, 2 error)
-uv run secsai --check https://example.com
-
-# Run the tests
-uv run pytest
-node --test tests/extension_failure.test.cjs
-```
-
-The API contract is in [docs/api_spec.md](docs/api_spec.md). Test details are in
-[tests/README.md](tests/README.md). GitHub Actions runs the tests on every push and pull request.
+Protect your browser from malicious websites and phishing links in real time using a Chrome extension powered by machine learning.
 
 ---
 
-## How to run the distributed system
+## Quick Start: Try the App in 3 Steps
 
-The distributed system decouples the web ingress from ML inference using RabbitMQ as a message broker:
-- **`rabbitmq`**: RabbitMQ message broker with management dashboard.
-- **`interface`**: Flask HTTP REST API accepting requests from the browser extension and dispatching RPC scan jobs.
-- **`worker`**: Background ML workers consuming scan jobs from RabbitMQ, running model inference, and replying with threat verdicts.
+### Step 1: Requirements
 
-### 1. Start the distributed system
+Make sure you have the following installed on your computer:
+1. **[Docker Desktop](https://www.docker.com/products/docker-desktop/)** (start it before running the app).
+2. **Google Chrome** (or any Chromium browser like Edge or Brave).
+3. **[uv](https://docs.astral.sh/uv/)** (package tool for Python):
+   - **macOS / Linux**:
+     ```bash
+     curl -LsSf https://astral.sh/uv/install.sh | sh
+     ```
+   - **Windows (PowerShell)**:
+     ```powershell
+     powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+     ```
 
-Start all services with a single command:
+---
+
+### Step 2: Download & Start the App
+
+Open your terminal and run:
 
 ```bash
+# Clone the repository
+git clone https://github.com/ktilburgtilburg/SECSAI-group-6.git
+cd SECSAI-group-6
+
+# Start the complete backend (API, message broker, and AI worker)
 docker compose up --build
 ```
 
-### 2. Scale workers
+> **Note:** Wait a few moments until you see `Running on http://127.0.0.1:5000`. The backend is now ready!
 
-To scale the number of inference workers (e.g. running 3 parallel model workers):
+---
 
-```bash
-docker compose up --build --scale worker=3
-```
+### Step 3: Add the Extension to Chrome
 
-### 3. Verify services
+1. Open Chrome and go to the address `chrome://extensions`.
+2. Toggle **Developer mode** in the top-right corner to **ON**.
+3. Click **Load unpacked** in the top-left corner.
+4. Select the `extension` folder inside the `SECSAI-group-6` directory.
+5. In your browser toolbar, click the puzzle piece icon and **Pin** the SECSAI extension so its icon is visible.
 
-- **RabbitMQ Dashboard**: Open `http://localhost:15672` (username: `guest`, password: `guest`).
-  - Navigate to the **Queues** tab and select `url_scans`.
-  - When `--scale worker=3` is active, the dashboard will show **3 Consumers**.
-- **Interface API**:
-  - Health check: `curl http://localhost:5000/health`
-    Returns `{"status": "ok", "queue": "ok"}` when the queue is connected.
-  - Assess URL:
-    ```bash
-    curl -X POST http://localhost:5000/api/v1/assess \
-         -H "Content-Type: application/json" \
-         -d '{"url": "https://example.com/login"}'
-    ```
-- **Browser Extension**:
-  1. Open Chrome/Chromium and navigate to `chrome://extensions`.
-  2. Enable **Developer mode** (top right).
-  3. Click **Load unpacked** and select the `extension/` folder.
-  4. The toolbar popup status dot reflects the system state:
-     - **Green ("Online")**: API and RabbitMQ queue are healthy.
-     - **Orange ("Queue Down")**: API is running, but RabbitMQ is unreachable or down.
-     - **Red ("API Down")**: API server is completely offline.
-  5. If the queue is down or a scan request times out, the backend returns HTTP 503 and the extension calmly displays a neutral **"COULDN'T VERIFY"** badge without interrupting navigation or crashing.
+---
 
-### 4. Stop the distributed system
+
+Once the extension is installed and the backend is running, test it out:
+
+1. **Safe Website**:
+   - Go to `https://www.wikipedia.org` or `https://github.com`.
+   - The extension will let you visit the website.
+
+2. **Malicious / Phishing Website**:
+   - Go to `http://icloudvsmapalocaliza.click`.
+   - The page is blocked! You will see a  warning screen explaining the threat, with buttons to return safely or proceed if you choose.
+
+3. **Check Connection Status**:
+   - Click the SECSAI icon in your browser toolbar to open the popup:
+     - 🟢 **Green ("Online")**: Connected and actively protecting your browser.
+     - 🟠 **Orange ("Queue Down")**: Server is reachable, but background queue is offline.
+     - 🔴 **Red ("API Down")**: Backend server is offline.
+
+4. **Manual Scan**:
+   - You can also type or paste any URL directly into the popup input box and click **Assess URL** to check it manually.
+
+---
+
+## Stopping the App
+
+When you are finished testing, press `Ctrl + C` in the terminal where Docker is running, or run:
 
 ```bash
 docker compose down
@@ -101,30 +82,62 @@ docker compose down
 
 ---
 
-## Dependencies
+## For Developers & Testing
+
+<details>
+<summary><strong>Click to view testing and developer commands</strong></summary>
+
+### Scan a URL from Terminal (CLI)
 
 ```bash
-uv add <package>         # add a dependency
-uv add --dev <package>   # add a dev-only dependency
-uv sync                  # after pulling someone else's changes
+uv run secsai --check https://example.com
 ```
 
-Commit both `pyproject.toml` and `uv.lock` after changing dependencies.
+### Run Automated Tests
 
-## Layout
+```bash
+# Run unit and contract tests (106 tests)
+uv run pytest
+
+# Run extension resilience tests
+node --test tests/extension_failure.test.cjs
+
+# Run full distributed system verification (load, worker crash, broker outage, recovery)
+uv run python scripts/verify_system.py
+```
+
+### Scale Inference Workers
+
+To run 3 parallel background AI workers:
+
+```bash
+docker compose up --build --scale worker=3
+```
+
+Check the RabbitMQ queue dashboard at [http://localhost:15672](http://localhost:15672) (Username: `guest`, Password: `guest`).
+
+### Retrain the Machine Learning Model
+
+The Random Forest model artifacts are stored in `models/` (`classifier.joblib` and `label_classes.json`). To rebuild features and retrain from `data/malicious_phish.csv`:
+
+```bash
+uv run python -m secsai_group_6.ml.setup
+```
+
+### Project Layout
 
 ```
 SECSAI-group-6
-├── docker-compose.yml  # multi-service orchestration (rabbitmq, interface, worker)
-├── Dockerfile          # container image for interface and worker
-├── docs/api_spec.md
+├── extension/          # Chrome extension (manifest.json, background.js, popup UI, warning screen)
 ├── src/secsai_group_6/
-│   ├── backend/        # Flask API: app.py, worker.py, validation.py, db.py, stub_model.py
-│   ├── ml/             # model and features
-│   ├── categories.py   # the four verdict categories
-│   └── cli.py          # terminal scanner
-├── extension/          # browser extension (service worker, popup UI, warning screen)
-├── data/
-├── notebooks/
-└── tests/
+│   ├── backend/        # Flask REST API, RabbitMQ client, background worker, SQLite database
+│   ├── ml/             # ML model inference, feature extraction, training pipeline
+│   ├── categories.py   # Verdict categories (benign, malicious)
+│   └── cli.py          # Terminal scanner CLI
+├── docker-compose.yml  # Multi-service setup (rabbitmq, interface, worker)
+├── models/             # Pretrained model artifacts
+├── data/               # Raw and processed datasets
+└── tests/              # Test suite and contracts
 ```
+
+</details>

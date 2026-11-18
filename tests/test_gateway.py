@@ -35,14 +35,10 @@ def test_assess_returns_the_workers_verdict(client, monkeypatch):
 
 
 @pytest.mark.parametrize(
-    "exc",
-    [
-        QueueUnavailable("x"),
-        QueueTimeout("x"),
-        BadReply("x"),
-    ],
+    "exc, status",
+    [(QueueUnavailable("x"), 503), (QueueTimeout("x"), 504), (BadReply("x"), 502)],
 )
-def test_queue_failures_become_gateway_errors(client, monkeypatch, exc):
+def test_queue_failures_become_gateway_errors(client, monkeypatch, exc, status):
     def boom(url):
         raise exc
 
@@ -50,7 +46,7 @@ def test_queue_failures_become_gateway_errors(client, monkeypatch, exc):
 
     resp = client.post("/api/v1/assess", json={"url": "https://example.com"})
 
-    assert resp.status_code == 500
+    assert resp.status_code == status
     assert "error" in resp.get_json()
 
 

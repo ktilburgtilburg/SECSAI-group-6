@@ -30,6 +30,7 @@ services:
   worker:
     build: .
     command: ["python", "-m", "secsai_group_6.backend.worker"]
+    restart: on-failure
     environment:
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5672
