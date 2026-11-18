@@ -10,7 +10,7 @@ SAFE = {
 }
 THREAT = {
     "is_malicious": True,
-    "category": "phishing",
+    "category": "malicious",
     "confidence": 0.85,
     "explanations": ["x"],
 }

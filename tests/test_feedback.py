@@ -9,7 +9,7 @@ from secsai_group_6.backend.db import StorageError
 URL = "/api/v1/feedback"
 VALID = {
     "url": "https://user:pw@Example.com:8080/reset?token=abc#frag",
-    "shown_category": "phishing",
+    "shown_category": "malicious",
     "reported_category": "benign",
 }
 
@@ -39,7 +39,7 @@ def test_saves_only_the_redacted_host(client, db_path):
     resp = client.post(URL, json=VALID)
     assert resp.status_code == 200
     assert resp.get_json() == {"status": "saved"}
-    assert read_rows(db_path) == [("https://example.com", "phishing", "benign")]
+    assert read_rows(db_path) == [("https://example.com", "malicious", "benign")]
 
 
 def test_duplicate_report_is_ignored(client, db_path):
@@ -55,12 +55,12 @@ def test_reports_survive_new_client_and_connection(client, db_path):
 
     assert client.post(URL, json=VALID).get_json() == {"status": "saved"}
     with app_module.app.test_client() as another_client:
-        response = another_client.post(URL, json={**VALID, "reported_category": "malware"})
+        response = another_client.post(URL, json={**VALID, "reported_category": "malicious"})
     assert response.status_code == 200
     assert response.get_json() == {"status": "saved"}
     assert read_rows(db_path) == [
-        ("https://example.com", "phishing", "benign"),
-        ("https://example.com", "phishing", "malware"),
+        ("https://example.com", "malicious", "benign"),
+        ("https://example.com", "malicious", "malicious"),
     ]
     with closing(sqlite3.connect(db_path)) as conn:
         timestamps = conn.execute("SELECT created_at FROM feedback").fetchall()
