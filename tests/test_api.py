@@ -1,3 +1,4 @@
+
 import pytest
 
 from tests.contracts import assert_verdict
@@ -15,7 +16,7 @@ def test_health(client):
     response = client.get("/health")
     assert response.status_code == 200
     assert response.is_json
-    assert response.get_json() == {"status": "ok", "queue": "ok"}
+    assert response.get_json() == {"status": "ok"}
 
 
 def test_assess_contract(client, url_case):
@@ -63,6 +64,7 @@ def test_invalid_json(client, data, content_type):
 
 def test_assess_passes_trimmed_url_to_model(client, api_module, monkeypatch):
     calls = []
+
     verdict = {
         "is_malicious": True,
         "category": "malware",
@@ -74,8 +76,13 @@ def test_assess_passes_trimmed_url_to_model(client, api_module, monkeypatch):
         calls.append(url)
         return verdict
 
-    monkeypatch.setattr(api_module, "rpc_assess", lambda url: (predict(url), "unit"))
-    response = client.post("/api/v1/assess", json={"url": "  https://example.test/  "})
+    monkeypatch.setattr(api_module, "predict", predict)
+
+    response = client.post(
+        "/api/v1/assess",
+        json={"url": "  https://example.test/  "},
+    )
+
     assert response.status_code == 200
     assert response.is_json
     assert response.get_json() == verdict
@@ -88,10 +95,15 @@ def test_prediction_failure_returns_json(client, api_module, monkeypatch):
 
         raise BadReply("internal model detail")
 
-    monkeypatch.setattr(api_module, "rpc_assess", fail)
-    response = client.post("/api/v1/assess", json={"url": "https://example.test/"})
-    assert_error(response, 502)
-    assert response.get_json() == {"error": "Invalid reply from prediction service"}
+    monkeypatch.setattr(api_module, "predict", fail)
+
+    response = client.post(
+        "/api/v1/assess",
+        json={"url": "https://example.test/"},
+    )
+
+    assert_error(response, 500)
+    assert response.get_json() == {"error": "Prediction failed"}
 
 
 @pytest.mark.parametrize(
