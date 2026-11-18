@@ -4,9 +4,9 @@
   {"id": "python", "url": "https://www.python.org/", "category": "benign"},
   {"id": "mozilla", "url": "https://www.mozilla.org/", "category": "benign"},
   {"id": "tilburg", "url": "https://www.tilburguniversity.edu/", "category": "benign"},
-  {"id": "icloud-phishing", "url": "br-icloud.com.br", "category": "phishing"},
-  {"id": "ebay-phishing", "url": "signin.eby.de.zukruygxctzmmqi.civpro.co.za", "category": "phishing"},
-  {"id": "marketing-phishing", "url": "http://www.marketingbyinternet.com/mo/e56508df639f6ce7d55c81ee3fcd5ba8/", "category": "phishing"},
-  {"id": "sport-malware", "url": "http://www.824555.com/app/member/SportOption.php?uid=guest&langx=gb", "category": "malware"},
-  {"id": "9779-malware", "url": "http://9779.info/%E5%84%BF%E7%AB%A5%E7%AB%8B%E4%BD%93%E7%BA%B8%E8%B4%B4%E7%94%BB/", "category": "malware"}
+  {"id": "icloud-phishing", "url": "br-icloud.com.br", "category": "malicious"},
+  {"id": "ebay-phishing", "url": "signin.eby.de.zukruygxctzmmqi.civpro.co.za", "category": "malicious"},
+  {"id": "marketing-phishing", "url": "http://www.marketingbyinternet.com/mo/e56508df639f6ce7d55c81ee3fcd5ba8/", "category": "malicious"},
+  {"id": "sport-malware", "url": "http://www.824555.com/app/member/SportOption.php?uid=guest&langx=gb", "category": "malicious"},
+  {"id": "9779-malware", "url": "http://9779.info/%E5%84%BF%E7%AB%A5%E7%AB%8B%E4%BD%93%E7%BA%B8%E8%B4%B4%E7%94%BB/", "category": "malicious"}
 ]
