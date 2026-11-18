@@ -13,16 +13,22 @@ document.addEventListener("DOMContentLoaded", () => {
     async function checkHealth() {
         try {
             const resp = await fetch("http://127.0.0.1:5000/health", { method: "GET" });
-            if (resp.ok) {
+            if (!resp.ok) {
+                statusDot.className = "dot offline";
+                statusText.textContent = "API Down";
+                return;
+            }
+            const data = await resp.json();
+            if (data.queue === "down" || data.status === "degraded") {
+                statusDot.className = "dot degraded";
+                statusText.textContent = "Queue Down";
+            } else {
                 statusDot.className = "dot online";
                 statusText.textContent = "Online";
-            } else {
-                statusDot.className = "dot offline";
-                statusText.textContent = "Offline";
             }
         } catch (e) {
             statusDot.className = "dot offline";
-            statusText.textContent = "Offline";
+            statusText.textContent = "API Down";
         }
     }
 
@@ -37,17 +43,33 @@ document.addEventListener("DOMContentLoaded", () => {
         btnScan.textContent = "...";
 
         const startTime = performance.now();
+        const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+        const timeoutId = (controller && typeof setTimeout !== "undefined")
+            ? setTimeout(() => controller.abort(), 6000)
+            : null;
+
         try {
-            const resp = await fetch("http://127.0.0.1:5000/api/v1/assess", {
+            const fetchOptions = {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ url: rawUrl })
-            });
+            };
+            if (controller) fetchOptions.signal = controller.signal;
+
+            const resp = await fetch("http://127.0.0.1:5000/api/v1/assess", fetchOptions);
+            if (timeoutId && typeof clearTimeout !== "undefined") clearTimeout(timeoutId);
 
             const elapsed = (performance.now() - startTime).toFixed(1);
 
             if (!resp.ok) {
-                throw new Error(`Server returned ${resp.status}`);
+                // If 503 or other server error, show neutral "COULDN'T VERIFY"
+                scanResult.classList.remove("hidden");
+                resultBadge.textContent = "COULDN'T VERIFY";
+                resultBadge.className = "result-badge neutral";
+                resultConfidence.textContent = "--";
+                resultReasons.innerHTML = `<li>Service unavailable (${resp.status}): queue or worker offline</li>`;
+                resultTime.textContent = `${elapsed}ms`;
+                return;
             }
 
             const data = await resp.json();
@@ -73,11 +95,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 resultReasons.appendChild(li);
             }
         } catch (err) {
+            if (timeoutId && typeof clearTimeout !== "undefined") clearTimeout(timeoutId);
             scanResult.classList.remove("hidden");
-            resultBadge.textContent = "ERROR";
-            resultBadge.className = "result-badge threat";
+            resultBadge.textContent = "COULDN'T VERIFY";
+            resultBadge.className = "result-badge neutral";
             resultConfidence.textContent = "--";
-            resultReasons.innerHTML = `<li>${err.message}</li>`;
+            const msg = err.name === "AbortError" ? "Assessment timed out" : (err.message || "Could not contact server");
+            resultReasons.innerHTML = `<li>${msg}</li>`;
             resultTime.textContent = "--";
         } finally {
             btnScan.disabled = false;

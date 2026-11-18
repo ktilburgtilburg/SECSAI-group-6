@@ -7,11 +7,11 @@ uv run --locked pytest
 node --test tests/extension_failure.test.cjs
 ```
 
-Python tests need no running server, dataset, trained model, or credentials.
-They block network access. Flask's test client calls the application in process;
+Unit tests need no running server, dataset, trained model, or credentials.
+They block network access. Live integration tests opt in separately. Flask's test client calls the application in process;
 feedback tests use temporary SQLite files and read committed rows through new
-connections. API and CLI contract tests explicitly inject the existing stub
-predictor. Model unit tests characterize that stub, not classifier accuracy.
+connections. API unit contract tests inject the stub through the RPC boundary; CLI tests
+mock HTTP responses. Model unit tests characterize that stub, not classifier accuracy.
 Both suites run in GitHub Actions; Node 22 or later is recommended locally.
 
 `fixtures/urls.json` has five benign reference URLs, three historical phishing
@@ -33,3 +33,8 @@ uv run --locked python scripts/benchmark_scan.py --rounds 100
 The command fails if the model is missing or the mean is >=50 ms. It never uses
 the stub. See [the test-results document](../docs/speed-failure-results.md) for
 recorded results, measurement scope, and the backend-stop browser procedure.
+
+For live API/queue tests, 1-versus-3-worker load measurements, injected worker and
+broker failures, and the Modeler 2 comparison, see
+[composed-system verification](../docs/composed-system-results.md). Live pytest
+checks require `--system-url` and otherwise skip explicitly.
