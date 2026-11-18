@@ -10,7 +10,7 @@ from secsai_group_6.ml.build_dataset import COUNT_FEATURES
 from secsai_group_6.ml.features import extract_features, feature_names
 
 MODEL_DIR = "models"
-THRESHOLD = 0.85
+THRESHOLD = 0.55
 
 _MODEL = None
 _CLASSES = None
@@ -21,6 +21,7 @@ def _load():
     global _MODEL, _CLASSES, _FEATURE_NAMES
     if _MODEL is None:
         _MODEL = joblib.load(f"{MODEL_DIR}/classifier.joblib")
+        _MODEL.n_jobs = 1
         with open(f"{MODEL_DIR}/label_classes.json") as f:
             _CLASSES = json.load(f)
         _FEATURE_NAMES = feature_names()

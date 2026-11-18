@@ -29,8 +29,8 @@ SEED = 42
 
 BEST_PARAMS = dict(
     n_estimators=200,
-    max_depth=30,
-    min_samples_leaf=1,
+    max_depth=20,
+    min_samples_leaf=5,
 )
 
 
@@ -39,7 +39,7 @@ def build_model():
         **BEST_PARAMS,
         class_weight="balanced",
         random_state=SEED,
-        n_jobs=-1,
+        n_jobs=1,
     )
 
 
@@ -91,7 +91,7 @@ def main():
     mal_true = y_te == "malicious"
 
     print(f"\n{'thr':>6s} {'FPR':>8s} {'recall':>8s} {'prec':>8s} {'F1_mal':>8s} {'F1_macro':>10s}")
-    for t in [0.30, 0.40, 0.50, 0.55, 0.60, 0.70, 0.80, 0.85, 0.90, 0.95]:
+    for t in [0.30, 0.40, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95]:
         flagged = mal_p >= t
         pred = np.where(flagged, "malicious", "benign")
         fp = int((flagged & benign_true).sum())
