@@ -8,11 +8,11 @@ WORKDIR /app
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-install-project --no-dev
 
-# 2) Copy project source, scripts, models, and README
+# 2) Copy project source, scripts, and README (models are mounted at runtime)
 COPY README.md ./
 COPY src/ ./src/
 COPY scripts/ ./scripts/
-COPY models/ ./models/
+RUN mkdir -p /app/models
 
 # 3) Install the project itself into the virtual environment
 RUN uv sync --frozen --no-dev

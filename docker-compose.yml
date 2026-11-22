@@ -31,6 +31,8 @@ services:
     build: .
     command: ["python", "-m", "secsai_group_6.backend.worker"]
     restart: on-failure
+    volumes:
+      - ./models:/app/models:ro
     environment:
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5672
