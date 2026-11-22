@@ -32,7 +32,7 @@ Check a URL and get a threat verdict.
 ```json
 {
   "is_malicious": true,
-  "category": "phishing",
+  "category": "malicious",
   "confidence": 0.85,
   "explanations": ["Uses raw IP address", "Contains credential keywords"]
 }
@@ -41,7 +41,7 @@ Check a URL and get a threat verdict.
 | Field          | Type         | Notes                                                                  |
 |----------------|--------------|------------------------------------------------------------------------|
 | `is_malicious` | bool         | `false` when category is `benign`                                      |
-| `category`     | string       | One of: `benign`, `phishing`, `malware`, `defacement`                  |
+| `category`     | string       | One of: `benign`, `malicious`                                          |
 | `confidence`   | float        | 0.0 to 1.0. How sure the model is of its own verdict, whichever class |
 | `explanations` | list[string] | Reasons for the verdict. Can be empty                                  |
 
@@ -67,7 +67,7 @@ Report a wrong verdict (e.g. a false alarm).
 ```json
 {
   "url": "https://example.com/page",
-  "shown_category": "phishing",
+  "shown_category": "malicious",
   "reported_category": "benign"
 }
 ```
@@ -77,8 +77,6 @@ Report a wrong verdict (e.g. a false alarm).
 | `url`               | Must be an `http` or `https` URL                         |
 | `shown_category`    | The category the user was shown                          |
 | `reported_category` | The category the user says is correct                    |
-
-Both categories are one of: `benign`, `phishing`, `malware`, `defacement`.
 
 **Response (200)**
 ```json
