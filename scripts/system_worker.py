@@ -13,8 +13,20 @@ else:
     from secsai_group_6.backend.stub_model import predict
 
 
+def _connect(max_tries: int = 30, delay: float = 1.0) -> pika.BlockingConnection:
+    params = pika.URLParameters(os.environ["RABBITMQ_URL"])
+    for attempt in range(max_tries):
+        try:
+            return pika.BlockingConnection(params)
+        except (pika.exceptions.AMQPError, OSError):
+            if attempt == max_tries - 1:
+                raise
+            time.sleep(delay)
+    raise RuntimeError("Could not connect to RabbitMQ")
+
+
 def serve():
-    conn = pika.BlockingConnection(pika.URLParameters(os.environ["RABBITMQ_URL"]))
+    conn = _connect()
     channel = conn.channel()
     channel.queue_declare(queue="assess_requests")
     channel.basic_qos(prefetch_count=1)
