@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "Test Extension",
-    "description": "Extension",
+    "name": "SECSAI Link Guard",
+    "description": "Real-time URL threat detection powered by machine learning.",
     "version": "2.0",
     "host_permissions": [
         "http://127.0.0.1:5000/*",
@@ -16,6 +16,6 @@
     },
     "action": {
         "default_popup": "popup.html",
-        "default_title": "Test Extension"
+        "default_title": "SECSAI Link Guard"
     }
 }

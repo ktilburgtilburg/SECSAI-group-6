@@ -3,14 +3,17 @@
 import json
 import logging
 import os
+import socket
 import time
 
 import pika
 import pika.exceptions
 
+from secsai_group_6.backend.validation import clean_url
 from secsai_group_6.ml.predict import predict
 
 logger = logging.getLogger(__name__)
+WORKER_ID = socket.gethostname()
 
 QUEUE_NAME = os.environ.get(
     "REQUEST_QUEUE", os.environ.get("QUEUE_NAME", "assess_requests")
@@ -50,8 +53,9 @@ def on_request(ch, method, props, body):
     """Score a queued URL and publish the verdict back to the caller's reply queue."""
     try:
         data = json.loads(body)
-        url = data.get("url")
+        url = clean_url(data.get("url"))
         verdict = predict(url)
+        verdict["worker_id"] = WORKER_ID
     except Exception as exc:
         logger.exception("Worker prediction failed")
         verdict = {
@@ -60,6 +64,7 @@ def on_request(ch, method, props, body):
             "category": "unknown",
             "confidence": 0.0,
             "explanations": ["Model error: " + str(exc)],
+            "worker_id": WORKER_ID,
         }
 
     ch.basic_publish(
