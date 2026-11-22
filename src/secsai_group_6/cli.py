@@ -10,6 +10,7 @@ TIMEOUT_S = 5
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Parse CLI arguments, query the assessment API, and print the verdict."""
     parser = argparse.ArgumentParser(
         prog="secsai", description="Check a URL for threats."
     )

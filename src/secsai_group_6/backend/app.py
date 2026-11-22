@@ -14,11 +14,8 @@ from werkzeug.exceptions import HTTPException
 from secsai_group_6.backend.db import StorageError, log_request, save_feedback
 from secsai_group_6.backend.rpc_client import (
     BadReply,
-    QueueError,
     QueueTimeout,
     QueueUnavailable,
-    queue_is_up,
-    rpc_assess,
 )
 from secsai_group_6.backend.validation import (
     InvalidInput,
@@ -27,18 +24,10 @@ from secsai_group_6.backend.validation import (
     json_object,
     redact_url,
 )
-from secsai_group_6.ml.predict import predict
 
 logger = logging.getLogger(__name__)
 
 API_PREFIX = "/api/v1"
-
-# What each queue failure means to the client.
-UPSTREAM_ERRORS = {
-    QueueUnavailable: (503, "Prediction service unavailable"),
-    QueueTimeout: (504, "Prediction service timed out"),
-    BadReply: (502, "Invalid reply from prediction service"),
-}
 
 app = Flask(__name__)
 CORS(app)
@@ -48,13 +37,13 @@ app.config.setdefault(
 
 
 def _get_pika_params(timeout: float = 1.0):
-    """Resolve standard connection parameters from RABBITMQ_URL or HOST/PORT."""
+    """Resolve RabbitMQ connection parameters from RABBITMQ_URL or HOST/PORT."""
     url = os.environ.get("RABBITMQ_URL")
     if url:
         params = pika.URLParameters(url)
     else:
         host = os.environ.get("RABBITMQ_HOST", "localhost")
-        port = int(os.environ.get("RABBITMQ_PORT", 5672))
+        port = int(os.environ.get("RABBITMQ_PORT", "5672"))
         params = pika.ConnectionParameters(host=host, port=port)
     params.socket_timeout = timeout
     params.connection_attempts = 1
@@ -63,15 +52,13 @@ def _get_pika_params(timeout: float = 1.0):
 
 
 def queue_is_up() -> bool:
+    """Return True if a short-lived RabbitMQ connection succeeds."""
     try:
         conn = pika.BlockingConnection(_get_pika_params(timeout=1.0))
         conn.close()
         return True
-    except Exception:
+    except (pika.exceptions.AMQPError, OSError):
         return False
-
-
-check_RABBITMQ_health = queue_is_up
 
 
 def error(message: str, status: int) -> tuple[dict, int]:
@@ -97,9 +84,7 @@ def handle_http_exception(exc: HTTPException):
 
 @app.get("/health")
 def health():
-    if app.config.get("TESTING"):
-        return {"status": "ok"}
-
+    """Report API and RabbitMQ broker health status."""
     queue_ok = queue_is_up()
     return {
         "status": "ok" if queue_ok else "degraded",
@@ -108,6 +93,7 @@ def health():
 
 
 def predict_rpc(url: str, timeout: float = 2.0) -> dict:
+    """Send a URL assessment job over RabbitMQ and wait for the worker reply."""
     conn = pika.BlockingConnection(_get_pika_params(timeout=timeout))
     try:
         channel = conn.channel()
@@ -161,18 +147,10 @@ def predict_rpc(url: str, timeout: float = 2.0) -> dict:
 
 @app.post(f"{API_PREFIX}/assess")
 def assess():
+    """Validate a URL and dispatch it to a background worker for threat assessment."""
     started = time.perf_counter()
     body = json_object(request.get_json(silent=True))
     url = clean_url(body.get("url"))
-
-    if app.config.get("TESTING"):
-        try:
-            res = predict(url)
-            _record(started, 200, res.get("category"))
-            return res
-        except Exception:
-            _record(started, 500)
-            return error("Prediction failed", 500)
 
     try:
         res = predict_rpc(url)
@@ -192,13 +170,14 @@ def assess():
         _record(started, 502)
         return error("Invalid reply from prediction service", 502)
     except Exception:
-        logger.exception("predict() failed")
+        logger.exception("predict_rpc() failed")
         _record(started, 500)
         return error("Prediction failed", 500)
 
 
 @app.post(f"{API_PREFIX}/feedback")
 def feedback():
+    """Store user feedback on a URL verdict after redacting private URL parts."""
     body = json_object(request.get_json(silent=True))
     url = redact_url(clean_url(body.get("url")))
     shown = clean_category(body.get("shown_category"), "shown_category")
@@ -209,6 +188,7 @@ def feedback():
 
 
 def _record(started, status, category=None, worker_id=None):
+    """Log request latency and outcome without failing the HTTP response."""
     latency_ms = round((time.perf_counter() - started) * 1000)
     try:
         log_request(app.config["DB_PATH"], status, latency_ms, category, worker_id)

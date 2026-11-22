@@ -2,10 +2,7 @@ from enum import StrEnum
 
 
 class Category(StrEnum):
-    """The only verdicts the system knows."""
+    """Binary verdict categories supported by the system."""
 
     BENIGN = "benign"
     MALICIOUS = "malicious"
-    PHISHING = "phishing"
-    MALWARE = "malware"
-    DEFACEMENT = "defacement"

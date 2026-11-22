@@ -55,7 +55,9 @@ def test_reports_survive_new_client_and_connection(client, db_path):
 
     assert client.post(URL, json=VALID).get_json() == {"status": "saved"}
     with app_module.app.test_client() as another_client:
-        response = another_client.post(URL, json={**VALID, "reported_category": "malicious"})
+        response = another_client.post(
+            URL, json={**VALID, "reported_category": "malicious"}
+        )
     assert response.status_code == 200
     assert response.get_json() == {"status": "saved"}
     assert read_rows(db_path) == [
@@ -68,7 +70,9 @@ def test_reports_survive_new_client_and_connection(client, db_path):
 
 
 def test_real_storage_failure_and_recovery(client, db_path, monkeypatch, tmp_path):
-    monkeypatch.setitem(app_module.app.config, "DB_PATH", tmp_path / "missing" / "db.sqlite")
+    monkeypatch.setitem(
+        app_module.app.config, "DB_PATH", tmp_path / "missing" / "db.sqlite"
+    )
     response = client.post(URL, json=VALID)
     assert response.status_code == 500
     assert response.get_json() == {"error": "Could not save feedback"}

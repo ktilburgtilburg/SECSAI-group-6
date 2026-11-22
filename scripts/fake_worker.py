@@ -21,7 +21,7 @@ def on_request(ch, method, props, body):
         reply = json.dumps(
             {
                 "is_malicious": bad,
-                "category": "phishing" if bad else "benign",
+                "category": "malicious" if bad else "benign",
                 "confidence": 0.85,
                 "explanations": ["Contains credential keywords"] if bad else [],
                 "worker_id": "fake-1",

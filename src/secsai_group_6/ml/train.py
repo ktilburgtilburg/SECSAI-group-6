@@ -19,7 +19,10 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (
-    accuracy_score, classification_report, confusion_matrix, f1_score,
+    accuracy_score,
+    classification_report,
+    confusion_matrix,
+    f1_score,
 )
 from sklearn.model_selection import train_test_split
 
@@ -27,11 +30,11 @@ DATA_DIR = "data/processed"
 MODEL_DIR = "models"
 SEED = 42
 
-BEST_PARAMS = dict(
-    n_estimators=200,
-    max_depth=20,
-    min_samples_leaf=5,
-)
+BEST_PARAMS = {
+    "n_estimators": 200,
+    "max_depth": 20,
+    "min_samples_leaf": 5,
+}
 
 
 def build_model():
@@ -45,7 +48,9 @@ def build_model():
 
 def report(name, y_true, y_pred):
     print(f"\n{name} accuracy: {accuracy_score(y_true, y_pred):.4f}")
-    print(f"{name} macro F1:  {f1_score(y_true, y_pred, average='macro', zero_division=0):.4f}")
+    print(
+        f"{name} macro F1:  {f1_score(y_true, y_pred, average='macro', zero_division=0):.4f}"
+    )
     print(classification_report(y_true, y_pred, zero_division=0))
 
 
@@ -54,7 +59,8 @@ def main():
 
     X = np.load(f"{DATA_DIR}/X.npy")
     y = np.load(f"{DATA_DIR}/y.npy", allow_pickle=True)
-    names = json.load(open(f"{DATA_DIR}/feature_names.json"))
+    with open(f"{DATA_DIR}/feature_names.json") as f:
+        names = json.load(f)
 
     if X.shape[0] != y.shape[0]:
         raise ValueError(f"row mismatch: X={X.shape[0]}, y={y.shape[0]}")
@@ -63,8 +69,12 @@ def main():
     print(f"classes: {dict(zip(*np.unique(y, return_counts=True)))}")
 
     idx = np.arange(len(y))
-    idx_tv, idx_te = train_test_split(idx, test_size=0.10, stratify=y, random_state=SEED)
-    idx_tr, idx_va = train_test_split(idx_tv, test_size=1/9, stratify=y[idx_tv], random_state=SEED + 1)
+    idx_tv, idx_te = train_test_split(
+        idx, test_size=0.10, stratify=y, random_state=SEED
+    )
+    idx_tr, idx_va = train_test_split(
+        idx_tv, test_size=1 / 9, stratify=y[idx_tv], random_state=SEED + 1
+    )
 
     X_tr, y_tr = X[idx_tr], y[idx_tr]
     X_va, y_va = X[idx_va], y[idx_va]
@@ -90,7 +100,9 @@ def main():
     benign_true = y_te == "benign"
     mal_true = y_te == "malicious"
 
-    print(f"\n{'thr':>6s} {'FPR':>8s} {'recall':>8s} {'prec':>8s} {'F1_mal':>8s} {'F1_macro':>10s}")
+    print(
+        f"\n{'thr':>6s} {'FPR':>8s} {'recall':>8s} {'prec':>8s} {'F1_mal':>8s} {'F1_macro':>10s}"
+    )
     for t in [0.30, 0.40, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95]:
         flagged = mal_p >= t
         pred = np.where(flagged, "malicious", "benign")
@@ -101,8 +113,10 @@ def main():
         prec = tp / max(int(flagged.sum()), 1)
         f1_mal = 2 * prec * rec / (prec + rec) if (prec + rec) > 0 else 0.0
         f1_macro = f1_score(y_te, pred, average="macro", zero_division=0)
-        print(f"{t:>6.2f} {fpr:>8.4f} {rec:>8.4f} {prec:>8.4f} "
-              f"{f1_mal:>8.4f} {f1_macro:>10.4f}")
+        print(
+            f"{t:>6.2f} {fpr:>8.4f} {rec:>8.4f} {prec:>8.4f} "
+            f"{f1_mal:>8.4f} {f1_macro:>10.4f}"
+        )
 
     print("\nfeature importance (top 15):")
     for i in np.argsort(model.feature_importances_)[::-1][:15]:

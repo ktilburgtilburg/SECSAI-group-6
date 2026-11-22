@@ -5,13 +5,16 @@ import pytest
 from secsai_group_6.ml import features
 
 
-@pytest.mark.parametrize("host, expected", [
-    ("192.0.2.1", True),
-    ("[2001:db8::1]", True),
-    ("256.1.1.1", False),
-    ("example.com", False),
-    ("", False),
-])
+@pytest.mark.parametrize(
+    "host, expected",
+    [
+        ("192.0.2.1", True),
+        ("[2001:db8::1]", True),
+        ("256.1.1.1", False),
+        ("example.com", False),
+        ("", False),
+    ],
+)
 def test_is_ip_address(host, expected):
     result = features.extract_features(host)
     assert result["is_ip_host"] is expected
@@ -33,7 +36,9 @@ def test_extract_features_detects_ip():
 
 
 def test_extract_features_detects_punycode():
-    assert features.extract_features("https://xn--bcher-kva.de/")["has_punycode"] is True
+    assert (
+        features.extract_features("https://xn--bcher-kva.de/")["has_punycode"] is True
+    )
 
 
 def test_strip_url_canonicalizes():

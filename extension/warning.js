@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Read parameters from URL (or use realistic test fallbacks)
     const targetUrl = params.get("url") || "https://example-phishing-login.com/auth";
-    const category = params.get("category") || "phishing";
+    const category = params.get("category") || "malicious";
     const confidence = parseFloat(params.get("confidence") || "0.88");
 
     let explanations = [];

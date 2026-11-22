@@ -1,0 +1,1027 @@
+{
+  "recovery": {
+    "status": 200,
+    "latency_ms": 827.6548000030743,
+    "body": {
+      "category": "benign",
+      "confidence": 0.85,
+      "explanations": [],
+      "is_malicious": false
+    }
+  },
+  "worker_kill": {
+    "timestamp": "2026-11-22T16:41:32.006603+00:00",
+    "requests": 100,
+    "concurrency": 6,
+    "duration_s": 27.708286199998838,
+    "throughput_rps": 3.6090286955388886,
+    "successful_throughput_rps": 3.4285772607619442,
+    "p95_latency_ms": 2033.7139000002935,
+    "statuses": {
+      "504": 5,
+      "200": 95
+    },
+    "samples": [
+      {
+        "status": 504,
+        "latency_ms": 2062.6206000015372,
+        "body": {
+          "error": "Prediction service timed out"
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1263.8331999987713,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 2040.0871999991068,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 504,
+        "latency_ms": 2086.0075000018696,
+        "body": {
+          "error": "Prediction service timed out"
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1237.3739000031492,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 504,
+        "latency_ms": 2069.8508999994374,
+        "body": {
+          "error": "Prediction service timed out"
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1719.7061000006215,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 989.5536000003631,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1599.328800002695,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1604.7149999976682,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 504,
+        "latency_ms": 2037.581599997793,
+        "body": {
+          "error": "Prediction service timed out"
+        }
+      },
+      {
+        "status": 504,
+        "latency_ms": 2033.7139000002935,
+        "body": {
+          "error": "Prediction service timed out"
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1600.9383000018715,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.237800001807,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.441199997178,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.165600000968,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1901.906399998552,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1925.0016000005417,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.0522000000929,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1619.295399999828,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1625.5762000000686,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1605.0890999977128,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1596.4385000006587,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.7709999982326,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1612.0716000004904,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.6577999982692,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1577.8532000003906,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.0873000015854,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1619.2148999980418,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1600.1419000021997,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1593.2205999997677,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1585.3870999999344,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1604.031599999871,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.2319000001298,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1584.8115000007965,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.566900000762,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1605.5034000019077,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.126499998325,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.1246999987634,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1606.2616999988677,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.6227000000072,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.8576999997313,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.4601999995648,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.2415999977966,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.2451000028232,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1600.0089000008302,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.1736999973655,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.515400001721,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1600.2879999978177,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1604.9796999977843,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.2107999999425,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.9998999983945,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.4341000013228,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.4916999997222,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.3210000023246,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.3259999999718,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.4902999995684,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1598.971100000199,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.506300001347,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1600.543700002163,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.6395999977249,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.03520000141,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.0304000012402,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1604.886399996758,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1605.5482999981905,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.790500001196,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.0232000007818,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1604.307499997958,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1604.0562000016507,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1598.6986000025354,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1600.319600001967,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.0497999998042,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1600.7398000001558,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.929000000382,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.617600001191,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.1674000005296,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1604.2603999994753,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.8154000014183,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.7577999991772,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.5355000017735,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.760699999635,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.9385999970837,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1600.7974999993166,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.4197000008135,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1605.2665999995952,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.8683999977366,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.6583000020764,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.244499997847,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.6210999991454,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1601.6027999976359,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1598.4614999979385,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.740900001867,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.6786000002176,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.586399996857,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.8397000011173,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.2873000003747,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.8236999993387,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1602.5847000018985,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1605.050800000754,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      },
+      {
+        "status": 200,
+        "latency_ms": 1603.5212999995565,
+        "body": {
+          "category": "benign",
+          "confidence": 0.85,
+          "explanations": [],
+          "is_malicious": false
+        }
+      }
+    ],
+    "redelivery_verified": true
+  },
+  "broker_stop": {
+    "status": 503,
+    "latency_ms": 6574.947000000975,
+    "body": {
+      "error": "Prediction service unavailable"
+    }
+  },
+  "all_workers_stop": {
+    "status": 504,
+    "latency_ms": 2033.6305999990145,
+    "body": {
+      "error": "Prediction service timed out"
+    }
+  }
+}
