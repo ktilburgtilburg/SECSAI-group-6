@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Guard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+    <div class="popup-container">
+        <!-- Header -->
+        <div class="popup-header">
+            <div class="logo-title">
+                <div class="shield-mini">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#131d45" stroke-width="2">
+                        <path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"></path>
+                    </svg>
+                </div>
+                <h2>Link Guard</h2>
+            </div>
+
+            <!-- Server Status Dot -->
+            <div class="status-indicator">
+                <span id="status-dot" class="dot checking"></span>
+                <span id="status-text" class="status-label">Checking...</span>
+            </div>
+        </div>
+
+        <!-- Manual URL Scanner -->
+        <div class="scanner-section">
+            <label for="url-input" class="input-label">TEST A URL</label>
+            <div class="input-row">
+                <input type="text" id="url-input" placeholder="https://example.com/login" autocomplete="off"
+                    spellcheck="false">
+                <button id="btn-scan" class="btn-scan">Scan</button>
+            </div>
+        </div>
+
+        <!-- Scan Result Area -->
+        <div id="scan-result" class="scan-result hidden">
+            <div class="result-header">
+                <span id="result-badge" class="result-badge">BENIGN</span>
+                <span id="result-confidence" class="result-confidence">--%</span>
+            </div>
+            <div id="result-reasons-box" class="reasons-box">
+                <ul id="result-reasons"></ul>
+            </div>
+            <div class="result-footer">
+                <span id="result-time" class="time-label">0ms</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

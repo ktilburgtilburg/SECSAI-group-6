@@ -1,7 +1,10 @@
 # API Spec
 
 Local server: `http://127.0.0.1:5000`
-All requests and responses use JSON.
+
+- Requests with a body must send `Content-Type: application/json`.
+- All responses are JSON, including errors.
+- Errors always look like `{"error": "message"}`.
 
 ---
 
@@ -11,7 +14,7 @@ Check if the server is online.
 
 **Response (200)**
 ```json
-{"status": "ok"}
+{"api": "ok", "queue": "ok"}
 ```
 
 ---
@@ -35,40 +38,68 @@ Check a URL and get a threat verdict.
 }
 ```
 
-| Field          | Type         | Notes                                                 |
-|----------------|--------------|-------------------------------------------------------|
-| `is_malicious` | bool         | `false` when category is `benign`                     |
-| `category`     | string       | One of: `benign`, `phishing`, `malware`, `defacement` |
-| `confidence`   | float        | 0.0 to 1.0                                            |
-| `explanations` | list[string] | Reasons for the verdict. Can be empty                 |
+| Field          | Type         | Notes                                                                  |
+|----------------|--------------|------------------------------------------------------------------------|
+| `is_malicious` | bool         | `false` when category is `benign`                                      |
+| `category`     | string       | One of: `benign`, `phishing`, `malware`, `defacement`                  |
+| `confidence`   | float        | 0.0 to 1.0. How sure the model is of its own verdict, whichever class |
+| `explanations` | list[string] | Reasons for the verdict. Can be empty                                  |
 
-**Error (400)**: missing body, missing/empty `url`, or `url` is not a string
-```json
-{"error": "url is required"}
-```
+**Errors**
+
+| Status | When                                                                              |
+|--------|-----------------------------------------------------------------------------------|
+| 400    | Body is not a JSON object (or wrong Content-Type), `url` missing, not a string, empty, or longer than 2048 characters |
+| 502    | Invalid reply from the model                                |
+| 503    | Queue unreachable                                |
+| 504    | No reply withing the timeout                                |
+
+On a 500 the extension decides whether to fail open or closed. The backend never
+returns a made-up verdict.
 
 ---
 
 ## `POST /api/v1/feedback`
 
-Report a wrong verdict (e.g. a false alarm). No personal data is stored.
+Report a wrong verdict (e.g. a false alarm).
 
 **Request**
 ```json
-{"url": "https://example.com", "reported_category": "benign"}
+{
+  "url": "https://example.com/page",
+  "shown_category": "phishing",
+  "reported_category": "benign"
+}
 ```
+
+| Field               | Notes                                                    |
+|---------------------|----------------------------------------------------------|
+| `url`               | Must be an `http` or `https` URL                         |
+| `shown_category`    | The category the user was shown                          |
+| `reported_category` | The category the user says is correct                    |
+
+Both categories are one of: `benign`, `phishing`, `malware`, `defacement`.
 
 **Response (200)**
 ```json
 {"status": "saved"}
 ```
+or `{"status": "duplicate"}` if the same report (host, shown, reported) was already stored.
 
-**Error (400)**: same format as above.
+**Errors**
+
+| Status | When                                                              |
+|--------|-------------------------------------------------------------------|
+| 400    | Invalid body, `url`, or category                                  |
+| 500    | The report could not be stored: `{"error": "Could not save feedback"}` |
+
+**Privacy:** only `scheme://hostname` is stored (e.g. `https://example.com`).
+The path, query, fragment, port, and any `user:pass@` are discarded before saving.
 
 ---
 
 ## Notes
 
-- Errors always look like `{"error": "message"}`.
 - The model's `predict(url)` must return the same fields as the `/assess` response.
+- Unknown routes and wrong methods (404, 405) also return `{"error": "..."}`.
 - CORS is enabled so the browser extension can call the server.

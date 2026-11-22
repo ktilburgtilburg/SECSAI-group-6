@@ -1,0 +1,16 @@
+{
+  "measured_at": "2026-11-17T23:22:47.736801+00:00",
+  "python": "3.12.14",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+  "model_sha256": "67b7b375fc9485bc3ed1adb870ff61a5c5bcebbe73ea833229de619d46ae38b1",
+  "labels_sha256": "605666e19d32bd9e9e853a6449ff6f6f048cfb2462fc2c94ffa10f94d8b8ed3d",
+  "samples": 1000,
+  "cold_first_scan_ms": 2012.2822,
+  "mean_ms": 14.6460867,
+  "p95_ms": 22.502,
+  "max_ms": 63.6566,
+  "threshold_ms": 50,
+  "passed": true,
+  "scope": "Warm predict(url), including feature extraction; excludes HTTP/browser latency"
+}

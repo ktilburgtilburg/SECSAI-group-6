@@ -2,7 +2,7 @@
 
 import math
 
-CATEGORIES = {"benign", "phishing", "malware", "defacement"}
+CATEGORIES = {"benign", "malicious"}
 
 
 def assert_verdict(payload):
