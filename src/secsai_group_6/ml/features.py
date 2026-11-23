@@ -5,13 +5,19 @@ import tldextract
 
 try:
     import Levenshtein as _Lev
-    def _lev(a, b): return _Lev.distance(a, b)
-except ImportError:
+
     def _lev(a, b):
-        if a == b: return 0
+        return _Lev.distance(a, b)
+except ImportError:
+
+    def _lev(a, b):
+        if a == b:
+            return 0
         la, lb = len(a), len(b)
-        if not la: return lb
-        if not lb: return la
+        if not la:
+            return lb
+        if not lb:
+            return la
         prev = list(range(lb + 1))
         for i, ca in enumerate(a, 1):
             cur = [i] + [0] * lb
@@ -25,86 +31,183 @@ _extractor = tldextract.TLDExtract(suffix_list_urls=())
 _SCHEME_PREFIXES = ("https://", "http://", "//")
 
 SENSITIVE_WORDS = (
-    "login", "log-in", "signin", "sign-in", "verify", "verification",
-    "confirm", "password", "credential", "bank", "banking", "wallet",
-    "secure", "security", "unlock", "suspend", "suspended", "reactivate",
-    "passcode", "otp",
+    "login",
+    "log-in",
+    "signin",
+    "sign-in",
+    "verify",
+    "verification",
+    "confirm",
+    "password",
+    "credential",
+    "bank",
+    "banking",
+    "wallet",
+    "secure",
+    "security",
+    "unlock",
+    "suspend",
+    "suspended",
+    "reactivate",
+    "passcode",
+    "otp",
 )
 
 KNOWN_BRANDS = {
-    "google.com": "google", "youtube.com": "youtube", "gmail.com": "gmail",
-    "amazon.com": "amazon", "apple.com": "apple", "icloud.com": "icloud",
-    "microsoft.com": "microsoft", "office.com": "office", "office365.com": "office365",
-    "outlook.com": "outlook", "live.com": "live", "paypal.com": "paypal",
-    "netflix.com": "netflix", "facebook.com": "facebook", "instagram.com": "instagram",
-    "whatsapp.com": "whatsapp", "linkedin.com": "linkedin", "twitter.com": "twitter",
-    "x.com": "x", "github.com": "github", "gitlab.com": "gitlab",
-    "dropbox.com": "dropbox", "adobe.com": "adobe", "yahoo.com": "yahoo",
-    "wikipedia.org": "wikipedia", "chase.com": "chase", "wellsfargo.com": "wellsfargo",
-    "bankofamerica.com": "bankofamerica", "binance.com": "binance", "coinbase.com": "coinbase",
-    "steamcommunity.com": "steamcommunity", "steampowered.com": "steampowered",
-    "spotify.com": "spotify", "zoom.us": "zoom", "telegram.org": "telegram",
-    "dhl.com": "dhl", "fedex.com": "fedex", "ups.com": "ups",
+    "google.com": "google",
+    "youtube.com": "youtube",
+    "gmail.com": "gmail",
+    "amazon.com": "amazon",
+    "apple.com": "apple",
+    "icloud.com": "icloud",
+    "microsoft.com": "microsoft",
+    "office.com": "office",
+    "office365.com": "office365",
+    "outlook.com": "outlook",
+    "live.com": "live",
+    "paypal.com": "paypal",
+    "netflix.com": "netflix",
+    "facebook.com": "facebook",
+    "instagram.com": "instagram",
+    "whatsapp.com": "whatsapp",
+    "linkedin.com": "linkedin",
+    "twitter.com": "twitter",
+    "x.com": "x",
+    "github.com": "github",
+    "gitlab.com": "gitlab",
+    "dropbox.com": "dropbox",
+    "adobe.com": "adobe",
+    "yahoo.com": "yahoo",
+    "wikipedia.org": "wikipedia",
+    "chase.com": "chase",
+    "wellsfargo.com": "wellsfargo",
+    "bankofamerica.com": "bankofamerica",
+    "binance.com": "binance",
+    "coinbase.com": "coinbase",
+    "steamcommunity.com": "steamcommunity",
+    "steampowered.com": "steampowered",
+    "spotify.com": "spotify",
+    "zoom.us": "zoom",
+    "telegram.org": "telegram",
+    "dhl.com": "dhl",
+    "fedex.com": "fedex",
+    "ups.com": "ups",
 }
 
 _BRAND_TOKENS = frozenset(KNOWN_BRANDS.values())
 _BRAND_DOMAINS = frozenset(KNOWN_BRANDS.keys())
 
 _TLD_RISK = {
-    "gov": 0.05, "edu": 0.05, "mil": 0.05, "int": 0.05,
-    "com": 0.10, "org": 0.10, "net": 0.10,
-
-    "de": 0.20, "fr": 0.20, "uk": 0.20, "co.uk": 0.20,
-    "nl": 0.20, "it": 0.20, "ca": 0.20, "au": 0.20, "com.au": 0.20,
-    "jp": 0.20, "es": 0.20, "be": 0.20, "ch": 0.20, "at": 0.20,
-    "ie": 0.20, "nz": 0.20, "eu": 0.20, "us": 0.20,
-    "io": 0.20, "co": 0.20, "ai": 0.20, "app": 0.20, "dev": 0.20,
-    "me": 0.20, "fm": 0.20,
-
-    "se": 0.30, "no": 0.30, "fi": 0.30, "dk": 0.30,
-    "pl": 0.30, "cz": 0.30, "ro": 0.30, "gr": 0.30, "hu": 0.30,
-    "tech": 0.30, "cloud": 0.30,
-
-    "br": 0.40, "com.br": 0.40,
-    "in": 0.40, "cn": 0.40, "com.cn": 0.40,
+    "gov": 0.05,
+    "edu": 0.05,
+    "mil": 0.05,
+    "int": 0.05,
+    "com": 0.10,
+    "org": 0.10,
+    "net": 0.10,
+    "de": 0.20,
+    "fr": 0.20,
+    "uk": 0.20,
+    "co.uk": 0.20,
+    "nl": 0.20,
+    "it": 0.20,
+    "ca": 0.20,
+    "au": 0.20,
+    "com.au": 0.20,
+    "jp": 0.20,
+    "es": 0.20,
+    "be": 0.20,
+    "ch": 0.20,
+    "at": 0.20,
+    "ie": 0.20,
+    "nz": 0.20,
+    "eu": 0.20,
+    "us": 0.20,
+    "io": 0.20,
+    "co": 0.20,
+    "ai": 0.20,
+    "app": 0.20,
+    "dev": 0.20,
+    "me": 0.20,
+    "fm": 0.20,
+    "se": 0.30,
+    "no": 0.30,
+    "fi": 0.30,
+    "dk": 0.30,
+    "pl": 0.30,
+    "cz": 0.30,
+    "ro": 0.30,
+    "gr": 0.30,
+    "hu": 0.30,
+    "tech": 0.30,
+    "cloud": 0.30,
+    "br": 0.40,
+    "com.br": 0.40,
+    "in": 0.40,
+    "cn": 0.40,
+    "com.cn": 0.40,
     "ru": 0.40,
-    "mx": 0.40, "com.mx": 0.40,
-    "vn": 0.40, "com.vn": 0.40,
-    "za": 0.40, "co.za": 0.40,
-    "ar": 0.40, "com.ar": 0.40,
-    "ua": 0.40, "com.ua": 0.40,
+    "mx": 0.40,
+    "com.mx": 0.40,
+    "vn": 0.40,
+    "com.vn": 0.40,
+    "za": 0.40,
+    "co.za": 0.40,
+    "ar": 0.40,
+    "com.ar": 0.40,
+    "ua": 0.40,
+    "com.ua": 0.40,
     "ir": 0.40,
-
-    "online": 0.50, "site": 0.50, "info": 0.50, "biz": 0.50, "pro": 0.50, "cc": 0.50, "tv": 0.50, "ly": 0.50,
-    "work": 0.60, "zip": 0.60, "stream": 0.60, "to": 0.60, "ws": 0.60,
-    "xyz": 0.70, "top": 0.70, "click": 0.70, "loan": 0.70, "gdn": 0.70, "icu": 0.70,
-    "tk": 0.85, "ml": 0.85, "ga": 0.85, "cf": 0.85, "gq": 0.85,
+    "online": 0.50,
+    "site": 0.50,
+    "info": 0.50,
+    "biz": 0.50,
+    "pro": 0.50,
+    "cc": 0.50,
+    "tv": 0.50,
+    "ly": 0.50,
+    "work": 0.60,
+    "zip": 0.60,
+    "stream": 0.60,
+    "to": 0.60,
+    "ws": 0.60,
+    "xyz": 0.70,
+    "top": 0.70,
+    "click": 0.70,
+    "loan": 0.70,
+    "gdn": 0.70,
+    "icu": 0.70,
+    "tk": 0.85,
+    "ml": 0.85,
+    "ga": 0.85,
+    "cf": 0.85,
+    "gq": 0.85,
 }
 _TLD_RISK_DEFAULT = 0.40
 
 
 def strip_url(url: str) -> str:
+    """Normalize a URL by removing its scheme, leading 'www.', and trailing slashes."""
     if not isinstance(url, str):
         return ""
     u = url.strip()
     low = u.lower()
     for p in _SCHEME_PREFIXES:
         if low.startswith(p):
-            u = u[len(p):]
+            u = u[len(p) :]
             break
     slash = u.find("/")
     if slash == -1:
         host, rest = u, ""
     else:
         host, rest = u[:slash], u[slash:]
-    host = host.lower()
-    if host.startswith("www."):
-        host = host[4:]
+    host = host.lower().removeprefix("www.")
     rest = rest.rstrip("/")
     return host + rest
 
 
 def extract_features(url: str) -> dict:
+    """Extract lexical, host, TLD, and brand-similarity features from a URL."""
     u = strip_url(url)
     try:
         parts = urlparse("//" + u)
@@ -191,15 +294,5 @@ def extract_features(url: str) -> dict:
 
 
 def feature_names() -> list[str]:
+    """Return the ordered list of feature names produced by extract_features()."""
     return list(extract_features("example.com").keys())
-
-
-if __name__ == "__main__":
-    for u in ["google.com", "gooogle.com", "paypal.com.secure-login.net",
-              "192.168.1.1/login", "google.com/search?q=test"]:
-        f = extract_features(u)
-        print(f"\n{u!r}")
-        print(f"  edit_norm:    {f['edit_distance_normalized']:.3f}")
-        print(f"  brand_in_sub: {f['brand_in_subdomain_not_registrable']:.0f}")
-        print(f"  tld_risk:     {f['tld_risk']:.2f}")
-        print(f"  sensitive:    {f['num_sensitive_words']}")

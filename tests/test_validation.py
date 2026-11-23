@@ -27,12 +27,16 @@ def test_clean_url_accepts_limit_and_rejects_one_character_over():
 
 
 def test_redact_url_removes_credentials_port_path_query_and_fragment():
-    assert redact_url(
-        "https://user:secret@Example.com:8080/reset?token=private#details"
-    ) == "https://example.com"
+    assert (
+        redact_url("https://user:secret@Example.com:8080/reset?token=private#details")
+        == "https://example.com"
+    )
 
 
-@pytest.mark.parametrize("url", ["example.com", "https:///missing-host", "file:///tmp/private", "https://[broken"])
+@pytest.mark.parametrize(
+    "url",
+    ["example.com", "https:///missing-host", "file:///tmp/private", "https://[broken"],
+)
 def test_redact_url_rejects_invalid_or_non_web_urls(url):
     with pytest.raises(InvalidInput):
         redact_url(url)

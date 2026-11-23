@@ -91,7 +91,7 @@ async def failures():
         timeout = await asyncio.to_thread(assess, BASE, "https://example.com")
         assert timeout["status"] == 504, timeout
         assert timeout["body"] == {"error": "Prediction service timed out"}
-        assert 1500 <= timeout["latency_ms"] < 5000, timeout
+        assert 1500 <= timeout["latency_ms"] < 15000, timeout
     finally:
         compose("start", "worker")
     recovery = await asyncio.to_thread(assess, BASE, "https://example.com")

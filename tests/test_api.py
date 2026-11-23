@@ -1,4 +1,3 @@
-
 import pytest
 
 from tests.contracts import assert_verdict
@@ -16,7 +15,7 @@ def test_health(client):
     response = client.get("/health")
     assert response.status_code == 200
     assert response.is_json
-    assert response.get_json() == {"status": "ok"}
+    assert response.get_json() == {"status": "ok", "queue": "ok"}
 
 
 def test_assess_contract(client, url_case):
@@ -67,16 +66,16 @@ def test_assess_passes_trimmed_url_to_model(client, api_module, monkeypatch):
 
     verdict = {
         "is_malicious": True,
-        "category": "malware",
+        "category": "malicious",
         "confidence": 0.93,
         "explanations": ["Model reason"],
     }
 
-    def predict(url):
+    def fake_rpc(url):
         calls.append(url)
-        return verdict
+        return dict(verdict)
 
-    monkeypatch.setattr(api_module, "predict", predict)
+    monkeypatch.setattr(api_module, "predict_rpc", fake_rpc)
 
     response = client.post(
         "/api/v1/assess",
@@ -91,11 +90,9 @@ def test_assess_passes_trimmed_url_to_model(client, api_module, monkeypatch):
 
 def test_prediction_failure_returns_json(client, api_module, monkeypatch):
     def fail(url):
-        from secsai_group_6.backend.rpc_client import BadReply
+        raise RuntimeError("internal model detail")
 
-        raise BadReply("internal model detail")
-
-    monkeypatch.setattr(api_module, "predict", fail)
+    monkeypatch.setattr(api_module, "predict_rpc", fail)
 
     response = client.post(
         "/api/v1/assess",

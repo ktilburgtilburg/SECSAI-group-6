@@ -20,7 +20,7 @@ def assess(base, url):
         headers={"Content-Type": "application/json"},
     )
     try:
-        with urllib.request.urlopen(req, timeout=10) as response:
+        with urllib.request.urlopen(req, timeout=15) as response:
             status, body = response.status, json.load(response)
     except urllib.error.HTTPError as exc:
         status = exc.code

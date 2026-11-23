@@ -5,17 +5,30 @@ import os
 
 import numpy as np
 
-from secsai_group_6.ml.dataset import load_data, clean_data
-from secsai_group_6.ml.features import extract_features, feature_names, strip_url
+from secsai_group_6.ml.dataset import clean_data, load_data
+from secsai_group_6.ml.features import extract_features, feature_names
 
 DATA_DIR = "data/processed"
 
 COUNT_FEATURES = {
-    "url_length", "hostname_length", "path_length", "query_length",
-    "num_dots", "num_hyphens", "num_slashes", "num_at", "num_question",
-    "num_equals", "num_digits", "num_underscores", "num_special_chars",
-    "num_sensitive_words", "num_subdomains", "num_query_params",
-    "edit_distance_to_nearest_brand", "num_subdomain_brand_matches",
+    "url_length",
+    "hostname_length",
+    "path_length",
+    "query_length",
+    "num_dots",
+    "num_hyphens",
+    "num_slashes",
+    "num_at",
+    "num_question",
+    "num_equals",
+    "num_digits",
+    "num_underscores",
+    "num_special_chars",
+    "num_sensitive_words",
+    "num_subdomains",
+    "num_query_params",
+    "edit_distance_to_nearest_brand",
+    "num_subdomain_brand_matches",
 }
 
 
@@ -34,9 +47,11 @@ def main():
     print(f"loaded: {len(df)} rows")
 
     clean, info = clean_data(df)
-    print(f"cleaned: {info['rows_after']} rows "
-          f"(dropped {info['conflict_rows']} conflicts, "
-          f"{info['duplicate_rows']} duplicates)")
+    print(
+        f"cleaned: {info['rows_after']} rows "
+        f"(dropped {info['conflict_rows']} conflicts, "
+        f"{info['duplicate_rows']} duplicates)"
+    )
     print(f"labels: {info['labels_after']}")
 
     names = list(feature_names())
@@ -50,7 +65,7 @@ def main():
             rows.append([feats[n] for n in names])
             labels.append(label)
             keep.append(i)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - skip malformed dataset rows
             skipped += 1
             if skipped <= 5:
                 print(f"  skip row {i}: {url!r} ({e!r})")

@@ -1,11 +1,10 @@
 import os
-import time
 import statistics
+import time
 
 import pytest
 
 from secsai_group_6.ml.predict import predict
-
 
 MODEL_PATH = "models/classifier.joblib"
 
@@ -50,6 +49,4 @@ def test_prediction_speed():
     print(f"Maximum: {maximum:.3f} ms")
 
     # Performance requirement
-    assert p95 < 50, (
-        f"P95 prediction time exceeded 50 ms: {p95:.3f} ms"
-    )
+    assert p95 < 50, f"P95 prediction time exceeded 50 ms: {p95:.3f} ms"

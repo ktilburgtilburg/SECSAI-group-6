@@ -34,7 +34,7 @@ def test_live_feedback_committed(request):
     host = f"https://{uuid.uuid4().hex}.example.com"
     body = {
         "url": host + "/private?token=secret",
-        "shown_category": "phishing",
+        "shown_category": "malicious",
         "reported_category": "benign",
     }
     for expected in ("saved", "duplicate"):
@@ -62,4 +62,4 @@ def test_live_feedback_committed(request):
         ],
         text=True,
     )
-    assert json.loads(output) == [[host, "phishing", "benign"]]
+    assert json.loads(output) == [[host, "malicious", "benign"]]

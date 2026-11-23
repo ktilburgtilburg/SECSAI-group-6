@@ -118,7 +118,12 @@ Check the RabbitMQ queue dashboard at [http://localhost:15672](http://localhost:
 
 ### Retrain the Machine Learning Model
 
-The Random Forest model artifacts are stored in `models/` (`classifier.joblib` and `label_classes.json`). To rebuild features and retrain from `data/malicious_phish.csv`:
+The Random Forest model artifacts are stored in `models/` (`classifier.joblib` and `label_classes.json`). To retrain, first download the dataset:
+
+1. Download the [Malicious URLs dataset](https://www.kaggle.com/datasets/sid321axn/malicious-urls-dataset) from Kaggle. You need a free Kaggle account.
+2. Unzip it and put `malicious_phish.csv` in the `data/` folder, so the path is `data/malicious_phish.csv`.
+
+Then rebuild the features and retrain:
 
 ```bash
 uv run python -m secsai_group_6.ml.setup

@@ -1,7 +1,7 @@
-from contextlib import closing
-from datetime import datetime, timezone
-from pathlib import Path
 import sqlite3
+from contextlib import closing
+from datetime import UTC, datetime
+from pathlib import Path
 
 from secsai_group_6.categories import Category
 
@@ -46,16 +46,15 @@ def save_feedback(
     reported_category: Category,
 ) -> bool:
     """Store a report. Returns True if new, False if it was already reported."""
-    created_at = datetime.now(timezone.utc).isoformat()
+    created_at = datetime.now(UTC).isoformat()
     try:
-        with closing(sqlite3.connect(db_path)) as conn:
-            with conn:
-                conn.execute(_SCHEMA)
-                cur = conn.execute(
-                    _INSERT,
-                    (url, shown_category.value, reported_category.value, created_at),
-                )
-                inserted = cur.rowcount == 1
+        with closing(sqlite3.connect(db_path)) as conn, conn:
+            conn.execute(_SCHEMA)
+            cur = conn.execute(
+                _INSERT,
+                (url, shown_category.value, reported_category.value, created_at),
+            )
+            inserted = cur.rowcount == 1
     except sqlite3.Error as exc:
         raise StorageError("Could not save feedback") from exc
     return inserted
@@ -69,15 +68,14 @@ def log_request(
     worker_id: str | None = None,
 ) -> None:
     """Record one /assess call. Stores no URL."""
-    created_at = datetime.now(timezone.utc).isoformat()
+    created_at = datetime.now(UTC).isoformat()
     try:
-        with closing(sqlite3.connect(db_path)) as conn:
-            with conn:
-                conn.execute(_LOG_SCHEMA)
-                conn.execute(
-                    "INSERT INTO request_log (created_at, status, category, latency_ms, worker_id) "
-                    "VALUES (?, ?, ?, ?, ?)",
-                    (created_at, status, category, latency_ms, worker_id),
-                )
+        with closing(sqlite3.connect(db_path)) as conn, conn:
+            conn.execute(_LOG_SCHEMA)
+            conn.execute(
+                "INSERT INTO request_log (created_at, status, category, latency_ms, worker_id) "
+                "VALUES (?, ?, ?, ?, ?)",
+                (created_at, status, category, latency_ms, worker_id),
+            )
     except sqlite3.Error as exc:
         raise StorageError("Could not log request") from exc

@@ -1,4 +1,3 @@
-
 import json
 
 import pytest
@@ -60,9 +59,7 @@ def test_health_reports_queue_state(client, monkeypatch):
 
 
 def test_parse_reply_accepts_a_valid_verdict():
-    verdict, worker_id = _parse_reply(
-        json.dumps({**GOOD, "worker_id": "w1"}).encode()
-    )
+    verdict, worker_id = _parse_reply(json.dumps({**GOOD, "worker_id": "w1"}).encode())
 
     assert verdict == GOOD
     assert worker_id == "w1"

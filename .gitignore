@@ -7,4 +7,6 @@ data/
 *.csv
 
 data/processed/
+*.db
+
 
