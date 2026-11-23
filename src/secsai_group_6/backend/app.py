@@ -92,7 +92,7 @@ def health():
     }
 
 
-def predict_rpc(url: str, timeout: float = 2.0) -> dict:
+def predict_rpc(url: str, timeout: float = 10.0) -> dict:
     """Send a URL assessment job over RabbitMQ and wait for the worker reply."""
     conn = pika.BlockingConnection(_get_pika_params(timeout=timeout))
     try:
